@@ -1,0 +1,14 @@
+{
+  "require": {
+    "noahbuscher/macaw": "dev-master",
+    "filp/whoops": "2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vlite\\": "framework"
+    },
+    "classmap": [
+      "app/controllers"
+    ]
+  }
+}
