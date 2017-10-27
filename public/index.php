@@ -9,4 +9,4 @@
 define('PUBLIC_PATH', __DIR__);
 
 require_once '../bootstrap.php';
-require_once BASE_PATH . '/config/routes.php';
+require_once BASE_CONFIG_PATH . '/routes.php';

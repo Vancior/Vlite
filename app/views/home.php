@@ -88,6 +88,7 @@
       <div class="container" style="margin-top: 10rem;">
         <h1 class="display-3"><?php echo $title; ?></h1>
         <p class="lead"><?php echo $subTitle; ?></p>
+        <p class="lead"><?php echo $where; ?></p>
       </div>
     </div>
   </div>
