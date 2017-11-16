@@ -31,7 +31,7 @@ class Model
 
   public function __construct($table)
   {
-    $this->table = $table;
+    $this->table = $this->addQuotation($table);
   }
 
   public function select()
@@ -44,8 +44,7 @@ class Model
     if (!empty($this->where))
       $select .= 'WHERE ' . $this->where;
 
-    // TODO: execute select
-    return $select;
+    return Db::query($select);
   }
 
   public function field($field)
@@ -86,8 +85,6 @@ class Model
       $this->where = $where;
     }
 
-//    $this->where = 'WHERE ' . $this->where;
-//    return $this->where;
     return $this;
   }
 
@@ -154,13 +151,12 @@ class Model
     $query = '';
     foreach ($data as $key => $value) {
       $query .= ', ' . $value;
-      $columns .= ', ' . $key;
+      $columns .= ', ' . $this->addQuotation($key);
     }
-    $columns = "[$this->table] (" . substr($columns, 2) . ")";
-    $query = "INSERT INTO $columns VALUES (" . substr($query, 2) . ");";
+    $columns = "$this->table (" . substr($columns, 2) . ")";
+    $query = "INSERT INTO $columns VALUES (" . substr($query, 2) . ")";
 
-    // TODO: execute query
-    return $query;
+    return Db::query($query);
   }
 
   public function insertAll($data)
@@ -179,14 +175,13 @@ class Model
         if (is_string($v))
           $v = '\'' . $v . '\'';
         $values .= ', ' . $v;
-        $columns .= ', ' . $k;
+        $columns .= ', ' . $this->addQuotation($k);
       }
-      $columns = "[$this->table] (" . substr($columns, 2) . ")";
+      $columns = "$this->table (" . substr($columns, 2) . ")";
       $query .= "INSERT INTO $columns VALUES (" . substr($values, 2) . ");\n";
     }
 
-    // TODO: execute query
-    return $query;
+    return Db::multiquery($query);
   }
 
   public function delete($table = null)
@@ -198,31 +193,30 @@ class Model
       if ($this->table != $table)
         throw new \InvalidArgumentException('Confirming Deleting Failure');
 
-      $query = "DELETE FROM $this->table;";
+      $query = "DELETE FROM $this->table";
     } else {
-      $query = "DELETE FROM $this->table $this->where;";
+      $query = "DELETE FROM $this->table WHERE $this->where";
     }
 
-    // TODO: execute query
-    return $query;
+    return Db::query($query);
   }
 
   private function dataImploded($key, $value)
   {
     $where = '';
 
-    if (strtoupper($key) == 'AND') {
+    if (strtoupper($key) == 'AND') { // for 'AND' => [e1, e2, e3]
       foreach ($value as $k => $v)
         $where .= ' AND ( ' . $this->dataImploded($k, $v) . ' )';
       $where = substr($where, 4);
-    } elseif (strtoupper($key) == 'OR') {
+    } elseif (strtoupper($key) == 'OR') { // for 'OR' => [e1, e2, e3]
       foreach ($value as $k => $v)
         $where .= ' OR ( ' . $this->dataImploded($k, $v) . ' )';
       $where = substr($where, 3);
     } else {
-      if (preg_match('/(\S*)\s*\[(\S+)]/', $key, $matches)) {
+      if (preg_match('/(\S*)\s*\[(\S+)]/', $key, $matches)) { // for 'field[>]' => 12 stuff
         $where = $this->handleOperator($matches[1], $value, $matches[2]);
-      } else {
+      } else { // for 'field' => [v1, v2, v3]
         if (is_array($value)) {
           $where = $this->addQuotation($key) . ' IN (';
           $range = '';
@@ -280,6 +274,6 @@ class Model
 
   private function addQuotation($key)
   {
-    return '"' . $key . '"';
+    return '`' . $key . '`';
   }
 }

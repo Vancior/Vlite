@@ -10,8 +10,8 @@ return array(
     'host' => 'localhost',
     'port' => '3306',
     'username' => 'vancior',
-    'password' => 'hjt1998',
-    'database_name' => 'vlite',
+    'passwd' => 'hjt1998',
+    'dbname' => 'vlite',
     'prefix' => 'VLI_',
     'charset' => 'utf-8'
 );

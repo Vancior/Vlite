@@ -7,10 +7,13 @@
  */
 
 define('DEBUG', true);
-define('BASE_PATH', __DIR__);
+define('BASE_PATH', str_replace('\\', '/', __DIR__));
 define('BASE_CONFIG_PATH', BASE_PATH . '/config');
 
 require_once BASE_PATH.'/vendor/autoload.php';
+
+//echo BASE_CONFIG_PATH;
+//exit;
 
 $whoops = new \Whoops\Run;
 if (DEBUG) {
@@ -21,3 +24,5 @@ if (DEBUG) {
   });
 }
 $whoops->register();
+
+$db = new \Vlite\Db();
