@@ -5,15 +5,25 @@
  * User: Vancior
  * Date: 2017/10/23
  * Time: 19:42
+ *
+ *
  */
 
 namespace Vlite;
 
+/**
+ * Class Model
+ *
+ * @package Vlite
+ */
 class Model
 {
   private $table;
+  private $field = '*';
   private $where;
   private $order;
+  private $join;
+  private $on;
   private $limit = 30;
   private $offset = 0;
 
@@ -26,13 +36,36 @@ class Model
 
   public function select()
   {
-    
+    $select = 'SELECT ' . $this->field . ' FROM ' . $this->table . ' ';
+    if (!empty($this->join))
+      $select .= 'JOIN ' . $this->join . ' ';
+    if (!empty($this->on))
+      $select .= 'ON ' . $this->on . ' ';
+    if (!empty($this->where))
+      $select .= 'WHERE ' . $this->where;
+
+    // TODO: execute select
+    return $select;
   }
 
+  public function field($field)
+  {
+    if (!is_string($field))
+      throw new \InvalidArgumentException('Field(string) Required');
+
+    $this->field = trim($field);
+
+    return $this;
+  }
+
+  /**
+   * @param $condition
+   * @return Model $this
+   */
   public function where($condition)
   {
     if (!is_array($condition)) {
-      $this->where = ' ' . $condition;
+      $this->where = trim($condition);
       return $this;
     }
 
@@ -53,7 +86,7 @@ class Model
       $this->where = $where;
     }
 
-    $this->where = 'WHERE ' . $this->where;
+//    $this->where = 'WHERE ' . $this->where;
 //    return $this->where;
     return $this;
   }
@@ -64,6 +97,30 @@ class Model
       throw new \UnexpectedValueException('Order String Not Correct');
 
     $this->order = $order;
+
+    return $this;
+  }
+
+  /**
+   * @param string $join
+   * @return Model $this
+   */
+  public function join($join)
+  {
+    if (!is_string($join))
+      throw new \InvalidArgumentException('Table Name(string) Required');
+
+    $this->join = trim($join);
+
+    return $this;
+  }
+
+  public function on($on)
+  {
+    if (!is_string($on))
+      throw new \InvalidArgumentException('Join Condition(string) Required');
+
+    $this->on = trim($on);
 
     return $this;
   }
@@ -102,6 +159,7 @@ class Model
     $columns = "[$this->table] (" . substr($columns, 2) . ")";
     $query = "INSERT INTO $columns VALUES (" . substr($query, 2) . ");";
 
+    // TODO: execute query
     return $query;
   }
 
@@ -127,6 +185,7 @@ class Model
       $query .= "INSERT INTO $columns VALUES (" . substr($values, 2) . ");\n";
     }
 
+    // TODO: execute query
     return $query;
   }
 
@@ -144,6 +203,7 @@ class Model
       $query = "DELETE FROM $this->table $this->where;";
     }
 
+    // TODO: execute query
     return $query;
   }
 
