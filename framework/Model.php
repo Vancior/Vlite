@@ -181,7 +181,7 @@ class Model
       $query .= "INSERT INTO $columns VALUES (" . substr($values, 2) . ");\n";
     }
 
-    return Db::multiquery($query);
+    return Db::multi_query($query);
   }
 
   public function delete($table = null)

@@ -20,6 +20,10 @@ class Db
     if (empty($config))
       throw new \ErrorException('Cannot find database config');
     $this->mysqli = new \mysqli($config['host'], $config['username'], $config['passwd'], $config['dbname'], $config['port']);
+    if (mysqli_connect_errno()) {
+      throw \Exception("Mysqli connection error: {$this->mysqli->connect_errno}");
+    }
+    $this->mysqli->autocommit(true);
     self::$db = $this;
   }
 
@@ -44,8 +48,23 @@ class Db
     return $data;
   }
 
-  public static function multiquery($sql)
+  public static function multi_query($sql)
   {
     return self::$db->mysqli->multi_query($sql);
+  }
+
+  public static function begin_transaction()
+  {
+    return self::$db->mysqli->begin_transaction();
+  }
+
+  public static function commit()
+  {
+    return self::$db->mysqli->commit();
+  }
+
+  public static function rollback()
+  {
+    return self::$db->mysqli->rollback();
   }
 }
