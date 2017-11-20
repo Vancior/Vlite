@@ -11,9 +11,9 @@ use Vlite\Model;
 
 class HomeController extends BaseController
 {
-  public function home()
+  public function home($num)
   {
-    $model = new Model('test');
+//    $model = new Model('test');
 //    $condition = [
 //        'AND' => [
 //            'aaaaa[>]' => 12341,
@@ -37,6 +37,9 @@ class HomeController extends BaseController
 //      header('HTTP/1.1 200 OK');
 //    elseif ($result === false)
 //      header('HTTP/1.1 400 Bad Request');
-    $this->output = $model->select();
+//    $this->output = $model->select();
+    $this->output = [$num];
+    $model = new Model('test');
+    $this->output = $model->where(['id' => [1, 2, 3]])->select();
   }
 }

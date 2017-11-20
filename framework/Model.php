@@ -79,15 +79,20 @@ class Model
     if (!empty($where_AND) || !empty($where_OR)) {
       $this->where = $this->dataImploded($where_keys[0], $condition[$where_keys[0]]);
     } else {
-      $where = '';
-      foreach ($condition as $key => $value) {
-        if (is_string($value))
-          $value = '\'' . $value . '\'';
-        $where .= ' AND ' . $this->addQuotation($key) . ' = ' . $value;
-      }
-      $where = substr($where, 4);
-      $this->where = $where;
+      $this->where = $this->dataImploded('AND', $condition);
     }
+//    if (!empty($where_AND) || !empty($where_OR)) {
+//      $this->where = $this->dataImploded($where_keys[0], $condition[$where_keys[0]]);
+//    } else {
+//      $where = '';
+//      foreach ($condition as $key => $value) {
+//        if (is_string($value))
+//          $value = '\'' . $value . '\'';
+//        $where .= ' AND ' . $this->addQuotation($key) . ' = ' . $value;
+//      }
+//      $where = substr($where, 4);
+//      $this->where = $where;
+//    }
 
     return $this;
   }
