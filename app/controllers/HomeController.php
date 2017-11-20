@@ -27,10 +27,16 @@ class HomeController extends BaseController
 //        ->withsubTitle('Issue/Problem Report Project.')
 //        ->withwhere($model->where(['value' => 'ssdf'])->delete());
 //    var_dump($model->where(['id' => 1])->select());
-    header('Content-Type:application/json');
-    echo json_encode($model->select());
+//    echo json_encode($model->field('id')->select());
+//    echo json_encode($model->select());
 //    echo json_encode($model->where(['value' => 44444])->delete());
 //    echo json_encode($model->insertAll([['value' => 44444], ['value' => 5555]]));
 //    echo json_encode(["1" => ["12"], "2" => ["123"], "4" => ["12314"]]);
+//    $result = $model->where(['value' => 44444])->delete();
+//    if ($result === true)
+//      header('HTTP/1.1 200 OK');
+//    elseif ($result === false)
+//      header('HTTP/1.1 400 Bad Request');
+    $this->output = $model->select();
   }
 }
