@@ -26,6 +26,7 @@ class Model
   private $on;
   private $limit = 30;
   private $offset = 0;
+  private $lock = false;
 
   private static $OP1 = ['>', '<', '>=', '<='];
 
@@ -42,8 +43,11 @@ class Model
     if (!empty($this->on))
       $select .= 'ON ' . $this->on . ' ';
     if (!empty($this->where))
-      $select .= 'WHERE ' . $this->where;
+      $select .= 'WHERE ' . $this->where . ' ';
+    if ($this->lock)
+      $select .= 'FOR UPDATE';
 
+    $this->reset_query();
     return Db::query($select);
   }
 
@@ -75,15 +79,20 @@ class Model
     if (!empty($where_AND) || !empty($where_OR)) {
       $this->where = $this->dataImploded($where_keys[0], $condition[$where_keys[0]]);
     } else {
-      $where = '';
-      foreach ($condition as $key => $value) {
-        if (is_string($value))
-          $value = '\'' . $value . '\'';
-        $where .= ' AND ' . $this->addQuotation($key) . ' = ' . $value;
-      }
-      $where = substr($where, 4);
-      $this->where = $where;
+      $this->where = $this->dataImploded('AND', $condition);
     }
+//    if (!empty($where_AND) || !empty($where_OR)) {
+//      $this->where = $this->dataImploded($where_keys[0], $condition[$where_keys[0]]);
+//    } else {
+//      $where = '';
+//      foreach ($condition as $key => $value) {
+//        if (is_string($value))
+//          $value = '\'' . $value . '\'';
+//        $where .= ' AND ' . $this->addQuotation($key) . ' = ' . $value;
+//      }
+//      $where = substr($where, 4);
+//      $this->where = $where;
+//    }
 
     return $this;
   }
@@ -156,6 +165,7 @@ class Model
     $columns = "$this->table (" . substr($columns, 2) . ")";
     $query = "INSERT INTO $columns VALUES (" . substr($query, 2) . ")";
 
+    $this->reset_query();
     return Db::query($query);
   }
 
@@ -181,6 +191,7 @@ class Model
       $query .= "INSERT INTO $columns VALUES (" . substr($values, 2) . ");\n";
     }
 
+    $this->reset_query();
     return Db::multi_query($query);
   }
 
@@ -198,7 +209,13 @@ class Model
       $query = "DELETE FROM $this->table WHERE $this->where";
     }
 
+    $this->reset_query();
     return Db::query($query);
+  }
+
+  public function lock()
+  {
+    $this->lock = true;
   }
 
   private function dataImploded($key, $value)
@@ -275,5 +292,16 @@ class Model
   private function addQuotation($key)
   {
     return '`' . $key . '`';
+  }
+
+  private function reset_query()
+  {
+    unset($this->where);
+    unset($this->order);
+    unset($this->join);
+    unset($this->on);
+    $this->field = '*';
+    $this->lock = false;
+    $this->offset = 0;
   }
 }
