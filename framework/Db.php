@@ -24,6 +24,7 @@ class Db
       throw \Exception("Mysqli connection error: {$this->mysqli->connect_errno}");
     }
     $this->mysqli->autocommit(true);
+    $this->mysqli->set_charset('UTF-8');
     self::$db = $this;
   }
 

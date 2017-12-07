@@ -8,12 +8,18 @@
 
 use NoahBuscher\Macaw\Macaw;
 
-$V = 'Vlite\\Controller\\';
+Macaw::get('api/q(:num)', 'HomeController@home');
 
-Macaw::get('home', 'HomeController@home');
+Macaw::get('/(:num)', function ($fu) {
+  echo $fu;
+});
 
 Macaw::get('p(:num)', function ($fu) {
   echo $fu;
+});
+
+Macaw::get('test', function () {
+  html('test');
 });
 
 Macaw::$error_callback = function () {
