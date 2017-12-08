@@ -9,6 +9,10 @@
 use NoahBuscher\Macaw\Macaw;
 
 Macaw::get('api/q(:num)', 'HomeController@home');
+Macaw::post('api/user', 'UserController@signUp');
+Macaw::post('api/session', 'UserController@login');
+Macaw::delete('api/session', 'UserController@logout');
+Macaw::get('api/session/user', 'UserController@autoLogin');
 
 Macaw::get('/(:num)', function ($fu) {
   echo $fu;
