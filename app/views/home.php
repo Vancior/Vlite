@@ -86,9 +86,9 @@
   <div class="wrapper">
     <div id="title" class="jumbotron jumbotron-fluid">
       <div class="container" style="margin-top: 10rem;">
-        <h1 class="display-3"><?php echo $title; ?></h1>
-        <p class="lead"><?php echo $subTitle; ?></p>
-        <p class="lead"><?php echo $where; ?></p>
+        <h1 class="display-3"></h1>
+        <p class="lead"></p>
+        <p class="lead"></p>
       </div>
     </div>
   </div>

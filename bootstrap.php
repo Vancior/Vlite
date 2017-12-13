@@ -22,6 +22,8 @@ if (DEBUG) {
 }
 $whoops->register();
 
+session_save_path(BASE_PATH . '/session');
+
 $db = new \Vlite\Db();
 
 function html($file)
