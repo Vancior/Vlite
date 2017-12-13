@@ -37,6 +37,29 @@
     var to_exec = document.getElementById("input_script");
     eval(to_exec.value);
   }
+  window.onload=()=>{
+    document.querySelector("textarea").addEventListener('keydown',function(e) {
+    if(e.keyCode === 9) { // tab was pressed
+        // get caret position/selection
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+
+        var target = e.target;
+        var value = target.value;
+
+        // set textarea value to: text before caret + tab + text after caret
+        target.value = value.substring(0, start)
+                    + "\t"
+                    + value.substring(end);
+
+        // put caret at right position again (add one for the tab)
+        this.selectionStart = this.selectionEnd = start + 1;
+
+        // prevent the focus lose
+        e.preventDefault();
+        }
+    },false);
+  }
 </script>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: absolute; width: 100%;">
@@ -90,7 +113,15 @@
       <div class="col-md-8">
         <div class="card">
           hello
-          <textarea id="input_script" rows="20"></textarea>
+          <textarea id="input_script" rows="20">$.ajax({
+            async:true,
+            method:'GET',
+            url:'',
+            data:{},
+            complete:(xhr)=>{
+            alert(xhr.status);
+           }
+})</textarea>
           <button onclick="exec()">执行</button>
         </div>
       </div>
@@ -169,9 +200,7 @@
     </div>
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
         integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
         crossorigin="anonymous"></script>
