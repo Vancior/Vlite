@@ -32,6 +32,12 @@
     margin: 0;
   }
 </style>
+<script type="text/javascript">
+  function exec(){
+    var to_exec = document.getElementById("input_script");
+    eval(to_exec.value);
+  }
+</script>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: absolute; width: 100%;">
   <a class="navbar-brand" href="#">Navbar</a>
@@ -84,6 +90,8 @@
       <div class="col-md-8">
         <div class="card">
           hello
+          <textarea id="input_script" rows="20"></textarea>
+          <button onclick="exec()">执行</button>
         </div>
       </div>
       <div class="col-md-4">
