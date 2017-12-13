@@ -1,2 +1,4 @@
 .idea
 vendor
+session
+!session/index.html

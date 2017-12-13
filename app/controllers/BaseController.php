@@ -11,7 +11,7 @@ use Vlite\View;
 class BaseController
 {
   public $view;
-  public $output;
+  public $output = [];
 
   public function __construct()
   {
