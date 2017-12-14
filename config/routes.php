@@ -15,6 +15,7 @@ Macaw::delete('api/session', 'UserController@logout');
 Macaw::get('api/session/user', 'UserController@autoLogin');
 Macaw::get('api/user/(:num)', 'UserController@info');
 Macaw::post('api/project', 'ProjectController@create');
+Macaw::get('api/project/(:num)/issue', 'IssueController@issue');
 
 //Macaw::get('/(:num)', function ($fu) {
 //  echo $fu;
@@ -28,10 +29,10 @@ Macaw::post('api/project', 'ProjectController@create');
 //  html('test');
 //});
 
-Macaw::get('(:all)', function ($file) {
-  html($file);
-});
-
+//Macaw::get('(:all)', function ($file) {
+//  html($file);
+//});
+//
 Macaw::$error_callback = function () {
   throw new Exception('404 Not Found');
 };
