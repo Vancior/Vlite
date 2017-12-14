@@ -13,6 +13,8 @@ Macaw::post('api/user', 'UserController@signUp');
 Macaw::post('api/session', 'UserController@login');
 Macaw::delete('api/session', 'UserController@logout');
 Macaw::get('api/session/user', 'UserController@autoLogin');
+Macaw::get('api/user/(:num)', 'UserController@info');
+Macaw::post('api/project', 'ProjectController@create');
 
 //Macaw::get('/(:num)', function ($fu) {
 //  echo $fu;
