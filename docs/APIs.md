@@ -2,7 +2,7 @@
 
 本文档为前后端交互的接口设计，在本文档中只定义了 __API__ 的url，忽略了静态页面的url。前端资源表示为 __xxx/xxx__ 时，返回html文件，在html文件中，通过 `location.href`获取当前的 __url__，然后决定访问哪个接口。如url为 __project/1__ 时，应返回显示项目信息的 __html__ 文件，之后通过`location.href`获取url，判断当前需获取 __project_id为1__ 的项目的内容，向 __api/project/1__，发送请求，之后将结果填入预留的空间中。
 
-[api/user](#post:/api/user)
+[api/user](#post-/api/user)
 
 [api/user](##post:/api/user)
 
@@ -12,7 +12,7 @@
 
 | method | url                                             | 描述                                             |
 | :----- | :---------------------------------------------- | :----------------------------------------------- |
-| POST   | [api/user](#post:/api/user)                                            | 通过表单提交啊，用户注册                         |
+| POST   | [api/user](#post-/api/user)                                            | 通过表单提交啊，用户注册                         |
 | GET    | api/user/notification                               | 获取用户通知信息                                 |
 | GET    | api/user/todo                                       | 查看todo list                                    |
 | GET    | api/user/(:user_name)                                 | 获取其他用户信息                                 |
@@ -34,7 +34,7 @@
 | POST   | api/project/(:project_id)/issue/(:issue_id)/commnet | 回复issue                                        |
 | POST   | api/project/(:project_id)/todo                      | 从issue中新建todo，隐式表单提交                  |
 
-## POST:/api/user
+## POST /api/user
 
 功能:
 通过表单提交，完成用户注册。
