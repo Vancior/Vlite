@@ -31,7 +31,7 @@
 通过表单提交，完成用户注册。
 
 表单内容:
-__user_name:str__ , __email:str__ , __password:str__
+__user_name:str__ , __user_email:str__ , __password:str__
 
 返回内容:
 
@@ -113,13 +113,12 @@ __user_name:str__ , __email:str__ , __password:str__
 ## GET:/api/user/(:user_name)
 
 功能:
-通过 __url__ 中的 __user_id__ ，获取目标用户的信息。
+通过 __url__ 中的 __user_name__ ，获取目标用户的信息。
 
 返回内容:
 
 ```javascript
 {
-  "user_id":0001,
   "user_name":"test1",
   "user_email":"test1@test.com",
   "user_profile":"test account",
@@ -134,7 +133,7 @@ __user_name:str__ , __email:str__ , __password:str__
 
 表单内容为:
 
-__user_email(str)__ , __passwd(str)__
+__user_email(str)__ , __password(str)__
 
 前端逻辑:
 正则表达式判断是否为邮箱，是则直接使用，否则通过 GET /user/(:user\_name) 的返回结果，获取 user\_email。
@@ -164,7 +163,7 @@ __user_email(str)__ , __passwd(str)__
 
 表单内容为:
 
-__project\_title(str)__ ， __project\_description(str)__ ， __project\_label(str)__ ，__file\_name(str)__ ，__version(str)__
+__project\_title(str)__ ， __project\_description(str)__ ， __project\_label(str)__
 
 前端逻辑:
 将多个 __label__ 用 __+__ 连接成一个字符串(?)
@@ -176,10 +175,7 @@ __project\_title(str)__ ， __project\_description(str)__ ， __project\_label(s
 
 ```javascript
 // 成功时。返回json或者 redirect?
-{
-  "status":"success"，
-  "message":""
-}
+
 // 失败时 state 为 400
 {
   "status":"failed",
