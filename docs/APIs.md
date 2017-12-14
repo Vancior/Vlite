@@ -12,7 +12,7 @@
 
 | method | url                                             | 描述                                             |
 | :----- | :---------------------------------------------- | :----------------------------------------------- |
-| POST   | [api/user](#post-api/user)                                            | 通过表单提交啊，用户注册                         |
+| POST   | [api/user](#post:apiuser)                                            | 通过表单提交啊，用户注册                         |
 | GET    | api/user/notification                               | 获取用户通知信息                                 |
 | GET    | api/user/todo                                       | 查看todo list                                    |
 | GET    | api/user/(:user_name)                                 | 获取其他用户信息                                 |
@@ -34,7 +34,7 @@
 | POST   | api/project/(:project_id)/issue/(:issue_id)/commnet | 回复issue                                        |
 | POST   | api/project/(:project_id)/todo                      | 从issue中新建todo，隐式表单提交                  |
 
-## POST api/user
+## POST:/api/user
 
 功能:
 通过表单提交，完成用户注册。
