@@ -14,16 +14,20 @@ Macaw::post('api/session', 'UserController@login');
 Macaw::delete('api/session', 'UserController@logout');
 Macaw::get('api/session/user', 'UserController@autoLogin');
 
-Macaw::get('/(:num)', function ($fu) {
-  echo $fu;
-});
+//Macaw::get('/(:num)', function ($fu) {
+//  echo $fu;
+//});
 
-Macaw::get('p(:num)', function ($fu) {
-  echo $fu;
-});
+//Macaw::get('p(:num)', function ($fu) {
+//  echo $fu;
+//});
 
-Macaw::get('test', function () {
-  html('test');
+//Macaw::get('test', function () {
+//  html('test');
+//});
+
+Macaw::get('(:all)', function ($file) {
+  html($file);
 });
 
 Macaw::$error_callback = function () {
