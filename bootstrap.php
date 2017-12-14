@@ -6,7 +6,7 @@
  * Time: 17:21
  */
 
-define('DEBUG', true);
+define('DEBUG', false);
 define('BASE_PATH', str_replace('\\', '/', __DIR__));
 define('BASE_CONFIG_PATH', BASE_PATH . '/config');
 
@@ -28,5 +28,9 @@ $db = new \Vlite\Db();
 
 function html($file)
 {
-  require_once BASE_PATH . '/html/' . $file . '.html';
+  $path = BASE_PATH . '/html/' . $file . '.html';
+  if (file_exists($path))
+    require_once $path;
+  else
+    echo 'access invalid';
 }
