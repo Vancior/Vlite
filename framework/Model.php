@@ -159,7 +159,10 @@ class Model
     $columns = '';
     $query = '';
     foreach ($data as $key => $value) {
-      $query .= ', ' . $value;
+      if (is_string($value))
+        $query .= ', ' . '\'' . $value . '\'';
+      else
+        $query .= ', ' . $value;
       $columns .= ', ' . $this->addQuotation($key);
     }
     $columns = "$this->table (" . substr($columns, 2) . ")";

@@ -12,7 +12,6 @@ class HomeController extends BaseController
 {
   public function home($num)
   {
-    $model = new Model('test');
-    $this->output = ['aaa' => 111, 'bbb' => [123, 123]];
+    $this->output = ['aaa' => 111, 'bbb' => ['ccc' => [111, 111], 'ddd' => [123, 123]]];
   }
 }

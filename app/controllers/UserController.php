@@ -60,8 +60,9 @@ class UserController extends BaseController
       $this->output['message'] = 'user not exist';
       return;
     }
+    $user_info = $user_info[0];
 
-    if ($password != $user_info['password']) {
+    if ($password != $user_info->password) {
       $this->output['message'] = 'password not correct';
     } else {
       $this->output['status'] = 'success';
@@ -83,7 +84,29 @@ class UserController extends BaseController
       return;
     }
 
-    $this->output['user_name'] = $_SESSION['user_info']['username'];
-    $this->output['icon'] = $_SESSION['user_info']['icon'];
+    $this->output['user_name'] = $_SESSION['user_info']->username;
+    $this->output['icon'] = $_SESSION['user_info']->icon;
+  }
+
+  public function info($user_id)
+  {
+    $model_user = new Model('user');
+    $this->output['status'] = 'failed';
+
+    if (is_string($user_id))
+      $user_id = intval($user_id);
+
+    $user_info = $model_user->where(['id' => $user_id])->select();
+    if (empty($user_info)) {
+      $this->output['msg'] = 'user not exist';
+      return;
+    }
+
+    $user_info = $user_info[0];
+    $this->output['user_id'] = $user_info->id;
+    $this->output['user_name'] = $user_info->username;
+    $this->output['user_email'] = $user_info->email;
+    $this->output['user_profile'] = $user_info->profile;
+    $this->output['user_icon'] = $user_info->icon;
   }
 }

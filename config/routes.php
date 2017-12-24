@@ -8,26 +8,55 @@
 
 use NoahBuscher\Macaw\Macaw;
 
-Macaw::get('api/q(:num)', 'HomeController@home');
+Macaw::get('api/(:num)', 'HomeController@home');
 Macaw::post('api/user', 'UserController@signUp');
 Macaw::post('api/session', 'UserController@login');
 Macaw::delete('api/session', 'UserController@logout');
 Macaw::get('api/session/user', 'UserController@autoLogin');
+Macaw::get('api/user/(:num)', 'UserController@info');
+Macaw::post('api/project', 'ProjectController@create');
+Macaw::get('api/project/(:num)/issue', 'IssueController@issue');
+Macaw::get('api/user/todo', 'TodoController@todo');
 
-Macaw::get('/(:num)', function ($fu) {
-  echo $fu;
+/*
+ * Warning: 这里不要直接使用(:all)，并且使用(:any)的情况下也有可能产生冲突
+ * 最好访问html不要使用二级目录，使用二级时手动分发url
+*/
+Macaw::get('(:any)', function ($file) {
+  html($file);
 });
 
-Macaw::get('p(:num)', function ($fu) {
-  echo $fu;
+Macaw::get('user/(:num)', function ($file) {
+  html('user');
 });
 
-Macaw::get('test', function () {
-  html('test');
+Macaw::get('project/(:num)', function ($file) {
+  html('project');
 });
 
-Macaw::$error_callback = function () {
-  throw new Exception('404 Not Found');
-};
+Macaw::get('issue/(:num)', function ($file) {
+  html('issue');
+});
+
+Macaw::get('js/(:all)', function ($file) {
+  js($file);
+});
+
+Macaw::get('css/(:all)', function ($file) {
+  css($file);
+});
+
+Macaw::get('images/(:all)', function ($file) {
+  image($file);
+});
+
+//Macaw::get('(:all)', function ($file) {
+//  require_once BASE_PATH . '/' . $file;
+//});
+
+Macaw::error(function () {
+//  throw new Exception('404 Not Found');
+  echo '404 not found';
+});
 
 Macaw::dispatch();

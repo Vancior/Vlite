@@ -26,7 +26,7 @@
 | POST   | [api/project/(:project\_id)/issue/(:issue\_id)/comment](#postapiproject_idissueissue_idcomment) | 回复issue                                        |
 | POST   | [api/project/(:project_id)/todo](#postapiprojectproject_idtodo)                                 | 从issue中新建todo，隐式表单提交                  |
 
-## POST:/api/user
+## POST:/api/user Vancior done
 
 功能:
 通过表单提交，完成用户注册。
@@ -119,7 +119,7 @@ __username:str__ , __email:str__ , __password:str__
 ]
 ```
 
-## GET:/api/user/(:user_name)
+## GET:/api/user/(:user_name) Vancior done
 
 功能:
 通过 __url__ 中的 __user_name__ ，获取目标用户的信息。
@@ -140,7 +140,7 @@ __username:str__ , __email:str__ , __password:str__
 }
 ```
 
-## POST:/api/session
+## POST:/api/session Vancior done
 
 功能:
 通过表单提交，完成用户登陆。
@@ -193,7 +193,7 @@ __email(str)__ , __password(str)__
 }
 ```
 
-## POST:/api/project
+## POST:/api/project Vancior done
 
 功能:
 通过表单提交，完成创建项目
@@ -237,7 +237,7 @@ __title(str)__ ， __description(str)__ ， __label(str)__
 功能:
 通过表单提交，完成提交 __issue__
 
-## GET:/api/project/(:project_id)/issue
+## GET:/api/project/(:project_id)/issue Vancior done
 
 功能:
 通过 __url__ 中的 __project\_id__ 获取其所有的 __issue__。

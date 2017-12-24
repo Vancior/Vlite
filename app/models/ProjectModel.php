@@ -8,12 +8,12 @@
 
 use \Vlite\Model;
 
-class ProjectModel extends Model{
+class ProjectModel extends Model
+{
 
   public function __construct()
   {
     parent::__construct('project');
   }
-
 
 }
