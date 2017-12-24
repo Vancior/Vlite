@@ -38,6 +38,14 @@ Macaw::get('issue/(:num)', function ($file) {
   html('issue');
 });
 
+Macaw::get('js/(:any).js', function ($file) {
+  js($file);
+});
+
+Macaw::get('css/(:any).css', function($file) {
+  css($file);
+});
+
 Macaw::error(function () {
 //  throw new Exception('404 Not Found');
   echo '404 not found';

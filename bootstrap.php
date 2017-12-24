@@ -34,3 +34,21 @@ function html($file)
   else
     echo 'access invalid';
 }
+
+function js($file)
+{
+  $path = BASE_PATH . '/js/' . $file . '.js';
+  if (file_exists($path))
+    require_once $path;
+  else
+    echo 'access invalid';
+}
+
+function css($file)
+{
+  $path = BASE_PATH . '/css/' . $file . '.css';
+  if (file_exists($path))
+    require_once $path;
+  else
+    echo 'access invalid';
+}
