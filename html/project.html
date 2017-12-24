@@ -1,0 +1,81 @@
+<html>
+
+<head>
+  <title>
+    project
+  </title>
+  <script type="text/javascript">
+    function exec() {
+    var to_exec = document.getElementById("input_script");
+    eval(to_exec.value);
+  }
+  function display_fun(err, result) {
+    if (err) {
+      alert(err);
+    } else {
+      window.location = './user'
+    }
+  }
+  function form_submit(form_obj, callback) {
+    form_obj
+    var queryObject = {};
+    if (form_obj) {
+      for (var i = 0; i < form_obj.length; ++i) {
+        if (form_obj[i].name) {
+          queryObject[form_obj[i].name] = form_obj[i].value;
+        } else {
+          queryObject[i.toString()] = form_obj[i].value;
+        }
+      }
+    }
+    console.log(queryObject);
+    $.ajax({
+      async: true,
+      method: 'POST',
+      url: './api/project',
+      data: queryObject,
+      complete: (xhr) => {
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+            var ret = xhr.responseJSON || xhr.responseText;
+            if (typeof (callback) == 'function') {
+              callback(undefined, ret);
+            } else {
+              callback(Error("a function is required, but parsed " +
+                typeof (
+                  callback)), undefined);
+            }
+          } else {
+            callback(Error("XMLHttpRequest status:" + xhr.status),
+              undefined);
+          }
+        }
+        //alert(xhr.status+xhr.responseText);
+      }
+    });
+  }
+  </script>
+
+</head>
+
+<body>
+  <div>
+    <form onsubmit="form_submit(this, display_fun); return false;">
+      <div>
+        <label for="useremial_ipt">项目名</label>
+        <input id="useremail_ipt" type="text" name="project_title">
+      </div>
+      <div>
+          <label for="useremial_ipt">描述</label>
+          <input id="useremail_ipt" type="text" name="project_description">
+        </div>
+      <div>
+        <label for="passwd_ipt">标签</label>
+        <input id="passwd_ipt" type="text" name="project_label">
+      </div>
+      <input type="submit" value="登陆">
+    </form>
+  </div>
+</body>
+
+</html>
