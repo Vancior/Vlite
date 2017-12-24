@@ -37,18 +37,33 @@ function html($file)
 
 function js($file)
 {
-  $path = BASE_PATH . '/js/' . $file . '.js';
-  if (file_exists($path))
+  $path = BASE_PATH . '/js/' . $file;
+  if (file_exists($path)) {
+    header('Content-Type: text/javascript');
     require_once $path;
+  }
   else
     echo 'access invalid';
 }
 
 function css($file)
 {
-  $path = BASE_PATH . '/css/' . $file . '.css';
-  if (file_exists($path))
+  $path = BASE_PATH . '/css/' . $file;
+  if (file_exists($path)) {
+    header('Content-Type: text/css');
     require_once $path;
+  }
+  else
+    echo 'access invalid';
+}
+
+function image($file)
+{
+  $path = BASE_PATH . '/images/' . $file;
+  if (file_exists($path)) {
+    header('Content-Type: text/css');
+    require_once $path;
+  }
   else
     echo 'access invalid';
 }

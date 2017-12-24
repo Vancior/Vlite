@@ -1,81 +1,152 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-  <title>
-    project
-  </title>
+  <title>Project</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"-->
+  <!--integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"-->
+  <!--crossorigin="anonymous">-->
+  <link rel="stylesheet" href="../css/semantic.css" type="text/css">
+  <script src="../js/semantic.js"></script>
+  <style>
+    /*html, body {*/
+      /*font-size: 1.1em;*/
+    /*}*/
+  </style>
   <script type="text/javascript">
     function exec() {
-    var to_exec = document.getElementById("input_script");
-    eval(to_exec.value);
-  }
-  function display_fun(err, result) {
-    if (err) {
-      alert(err);
-    } else {
-      window.location = './user'
+      var to_exec = document.getElementById("input_script");
+      eval(to_exec.value);
     }
-  }
-  function form_submit(form_obj, callback) {
-    form_obj
-    var queryObject = {};
-    if (form_obj) {
-      for (var i = 0; i < form_obj.length; ++i) {
-        if (form_obj[i].name) {
-          queryObject[form_obj[i].name] = form_obj[i].value;
-        } else {
-          queryObject[i.toString()] = form_obj[i].value;
-        }
+
+    function display_fun(err, result) {
+      if (err) {
+        alert(err);
+      } else {
+        window.location = './user'
       }
     }
-    console.log(queryObject);
-    $.ajax({
-      async: true,
-      method: 'POST',
-      url: './api/project',
-      data: queryObject,
-      complete: (xhr) => {
-        if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-            var ret = xhr.responseJSON || xhr.responseText;
-            if (typeof (callback) == 'function') {
-              callback(undefined, ret);
-            } else {
-              callback(Error("a function is required, but parsed " +
-                typeof (
-                  callback)), undefined);
-            }
+
+    function form_submit(form_obj, callback) {
+      form_obj
+      var queryObject = {};
+      if (form_obj) {
+        for (var i = 0; i < form_obj.length; ++i) {
+          if (form_obj[i].name) {
+            queryObject[form_obj[i].name] = form_obj[i].value;
           } else {
-            callback(Error("XMLHttpRequest status:" + xhr.status),
-              undefined);
+            queryObject[i.toString()] = form_obj[i].value;
           }
         }
-        //alert(xhr.status+xhr.responseText);
       }
-    });
-  }
+      console.log(queryObject);
+      $.ajax({
+        async: true,
+        method: 'POST',
+        url: './api/project',
+        data: queryObject,
+        complete: (xhr) = > {
+        if(xhr.readyState == 4)
+      {
+        if (xhr.status == 200) {
+          var ret = xhr.responseJSON || xhr.responseText;
+          if (typeof (callback) == 'function') {
+            callback(undefined, ret);
+          } else {
+            callback(Error("a function is required, but parsed " +
+                typeof (
+                    callback)), undefined);
+          }
+        } else {
+          callback(Error("XMLHttpRequest status:" + xhr.status),
+              undefined);
+        }
+      }
+      //alert(xhr.status+xhr.responseText);
+    }
+    })
+      ;
+    }
   </script>
 
 </head>
 
 <body>
-  <div>
-    <form onsubmit="form_submit(this, display_fun); return false;">
-      <div>
-        <label for="useremial_ipt">项目名</label>
-        <input id="useremail_ipt" type="text" name="project_title">
-      </div>
-      <div>
-          <label for="useremial_ipt">描述</label>
-          <input id="useremail_ipt" type="text" name="project_description">
+<div class="ui container" style="padding-top: 1em;">
+  <div class="ui secondary  menu">
+    <a class="active item">
+      Home
+    </a>
+    <a class="item">
+      Messages
+    </a>
+    <a class="item">
+      Friends
+    </a>
+    <div class="right menu">
+      <div class="item">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search...">
+          <i class="search link icon"></i>
         </div>
-      <div>
-        <label for="passwd_ipt">标签</label>
-        <input id="passwd_ipt" type="text" name="project_label">
       </div>
-      <input type="submit" value="登陆">
-    </form>
+      <a class="ui item">
+        Logout
+      </a>
+    </div>
   </div>
+  <div class="ui grid">
+    <div class="six wide column">
+      <div class="ui fluid card">
+        <div class="content">
+          <div class="header"><h1>project name</h1></div>
+
+          <div class="meta">created at time</div>
+          <div class="description">
+            <p>project description</p>
+          </div>
+        </div>
+        <div class="extra content">
+            <a class="ui blue label">iOS</a>
+            <a class="ui yellow label">Swift</a>
+          <div class="right floated author">
+            <img class="ui avatar image" src="../images/123.jpg"> Username
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ten wide column">
+      <div class="seven wide column">
+        <div class="ui fluid card">
+          <div class="content">
+            <div class="header"><h1>Cute Dog</h1></div>
+            <div class="meta">2 days ago</div>
+            <div class="description">
+              <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their adorable faces, others
+                for their tiny stature, and even others for their massive size.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+              <p>Many people also have their own barometers for what makes a cute dog.</p>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.js" crossorigin="anonymous"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"-->
+<!--integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"-->
+<!--crossorigin="anonymous"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"-->
+<!--integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"-->
+<!--crossorigin="anonymous"></script>-->
+
 </body>
 
 </html>

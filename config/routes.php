@@ -38,13 +38,21 @@ Macaw::get('issue/(:num)', function ($file) {
   html('issue');
 });
 
-Macaw::get('js/(:any).js', function ($file) {
+Macaw::get('js/(:all)', function ($file) {
   js($file);
 });
 
-Macaw::get('css/(:any).css', function($file) {
+Macaw::get('css/(:all)', function ($file) {
   css($file);
 });
+
+Macaw::get('images/(:all)', function ($file) {
+  image($file);
+});
+
+//Macaw::get('(:all)', function ($file) {
+//  require_once BASE_PATH . '/' . $file;
+//});
 
 Macaw::error(function () {
 //  throw new Exception('404 Not Found');
