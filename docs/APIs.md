@@ -2,29 +2,29 @@
 
 本文档为前后端交互的接口设计，在本文档中只定义了 __API__ 的url，忽略了静态页面的url。前端资源表示为 __xxx/xxx__ 时，返回html文件，在html文件中，通过 `location.href`获取当前的 __url__，然后决定访问哪个接口。如url为 __project/1__ 时，应返回显示项目信息的 __html__ 文件，之后通过`location.href`获取url，判断当前需获取 __project_id为1__ 的项目的内容，向 __api/project/1__，发送请求，之后将结果填入预留的空间中。
 
-| method | url                                             | 描述                                             |
-| :----- | :---------------------------------------------- | :----------------------------------------------- |
-| POST   | [api/user](#postapiuser)                                            | 通过表单提交啊，用户注册                         |
-| GET    | [api/user/notification](#getapiusernotification)                               | 获取用户通知信息                                 |
-| GET    | [api/user/todo](#getapiusertodo)                                       | 查看todo list                                    |
-| GET    | [api/user/(:user_name)](#getapiuseruser_name)                                 | 获取其他用户信息                                 |
-| POST   | [api/session](#postapisession)                                         | 通过表单提交，用户登陆                           |
-| GET    | [api/session/user](#getapisessionuser)                                    | 获取自己的信息                                   |
-| DELETE | [api/session](#deleteapisession)                                         | 用户退出登陆                                     |
-| POST   | [api/project](#postapiproject)                                         | 表单提交，新建项目                               |
-| PUT    | [api/project/(:project_id)](#putapiprojectproject_id)                           | 通过表单提交，修改项目描述信息，标签，权限       |
-| GET    | [api/project/(:project_id)](#getapiprojectproject_id)                           | 查看描述信息                                     |
-| POST   | [api/project/(:project_id)/file](#postapiprojectproject_idfile)                      | 表单提交，上传文件                               |
-| GET    | [api/project/(:project_id)/file](#getapiprojectproject_idfile)                      | 下载打包后的项目文件                             |
-| POST   | [api/project/(:project_id)/issue](#postapiprojectproject_idissue)                      | 新建issue，表单提交                              |
-| GET    | [api/project/(:project_id)/issue](#getapiprojectproject_idissue)                      | 列出project中的issue                             |
-| GET    | [api/project/(:project_id)/issue/(:issue\_id)](#getapiprojectproject_idissueissue_id)         | 列出project中的某个issue                         |
-| PUT    | [api/project/(:project_id)/issue/(:issue\_id)](#putapiprojectproject_idissueissue_id)         | 修改issue                                  |
-|DELETE  | [api/project/(:project_id)/issue/(:issue\_id)](#deleteapiprojectproject_idissueissue_id)         | 关闭issue|
-| GET    | [api/issue?keyword=]                                  | 搜索lable，milestone，title，open state搜索issue |
-| GET    | [api/project?name=&label=&owner=]                     | 根据name，label，owner搜索project                |
+| method | url                                                                                             | 描述                                             |
+| :----- | :---------------------------------------------------------------------------------------------- | :----------------------------------------------- |
+| POST   | [api/user](#postapiuser)                                                                        | 通过表单提交啊，用户注册                         |
+| GET    | [api/user/notification](#getapiusernotification)                                                | 获取用户通知信息                                 |
+| GET    | [api/user/todo](#getapiusertodo)                                                                | 查看todo list                                    |
+| GET    | [api/user/(:user_name)](#getapiuseruser_name)                                                   | 获取其他用户信息                                 |
+| POST   | [api/session](#postapisession)                                                                  | 通过表单提交，用户登陆                           |
+| GET    | [api/session/user](#getapisessionuser)                                                          | 获取自己的信息                                   |
+| DELETE | [api/session](#deleteapisession)                                                                | 用户退出登陆                                     |
+| POST   | [api/project](#postapiproject)                                                                  | 表单提交，新建项目                               |
+| PUT    | [api/project/(:project_id)](#putapiprojectproject_id)                                           | 通过表单提交，修改项目描述信息，标签，权限       |
+| GET    | [api/project/(:project_id)](#getapiprojectproject_id)                                           | 查看描述信息                                     |
+| POST   | [api/project/(:project_id)/file](#postapiprojectproject_idfile)                                 | 表单提交，上传文件                               |
+| GET    | [api/project/(:project_id)/file](#getapiprojectproject_idfile)                                  | 下载打包后的项目文件                             |
+| POST   | [api/project/(:project_id)/issue](#postapiprojectproject_idissue)                               | 新建issue，表单提交                              |
+| GET    | [api/project/(:project_id)/issue](#getapiprojectproject_idissue)                                | 列出project中的issue                             |
+| GET    | [api/project/(:project_id)/issue/(:issue\_id)](#getapiprojectproject_idissueissue_id)           | 列出project中的某个issue                         |
+| PUT    | [api/project/(:project_id)/issue/(:issue\_id)](#putapiprojectproject_idissueissue_id)           | 修改issue                                        |
+| DELETE | [api/project/(:project_id)/issue/(:issue\_id)](#deleteapiprojectproject_idissueissue_id)        | 关闭issue                                        |
+| GET    | [api/issue?keyword=]                                                                            | 搜索lable，milestone，title，open state搜索issue |
+| GET    | [api/project?name=&label=&owner=]                                                               | 根据name，label，owner搜索project                |
 | POST   | [api/project/(:project\_id)/issue/(:issue\_id)/comment](#postapiproject_idissueissue_idcomment) | 回复issue                                        |
-| POST   | [api/project/(:project_id)/todo](#postapiprojectproject_idtodo)                      | 从issue中新建todo，隐式表单提交                  |
+| POST   | [api/project/(:project_id)/todo](#postapiprojectproject_idtodo)                                 | 从issue中新建todo，隐式表单提交                  |
 
 ## POST:/api/user
 
@@ -171,6 +171,28 @@ __email(str)__ , __password(str)__
 }
 ```
 
+## GET:/api/session/user
+
+功能:
+获取个人信息，
+
+返回内容:
+
+```javascript
+{
+  "username":"xxx",
+  "email":"xxx@xxx.com",
+  "profile":"xxx",
+  "icon":"xxx/xxx.jpg",
+  "project_list":[
+    {
+      "project_id":1312,
+      "title":"project name"
+    }
+  ]
+}
+```
+
 ## POST:/api/project
 
 功能:
@@ -223,17 +245,21 @@ __title(str)__ ， __description(str)__ ， __label(str)__
 返回内容
 
 ```javascript
-[
-  {
-    "issue_id":0001,
-    "title":"test_issue1",
-    "description":"a test issue",
-    "create_time":"2017-12-31 06:24:05",
-    "close_time":"2017-12-31 06:24:06",
-    "lable":"test",
-    "statu":1
-  }
-]
+{
+  "project_id":1231231,
+  "title":"project name 1",
+  "issue_list":[
+    {
+      "issue_id":0001,
+      "title":"test_issue1",
+      "description":"a test issue",
+      "create_time":"2017-12-31 06:24:05",
+      "close_time":"2017-12-31 06:24:06",
+      "lable":"test",
+      "statu":1
+    }
+  ]
+}
 ```
 
 ## GET:/api/project/(:project\_id)/issue/(:issue\_id)
