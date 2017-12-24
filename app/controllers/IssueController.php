@@ -19,16 +19,28 @@ class IssueController extends BaseController
     if (is_string($project_id))
       $project_id = intval($project_id);
 
-    if (empty($model_project->where(['id' => $project_id])->select())) {
+    $project_info = $model_project->where(['id' => $project_id])->select();
+
+    if (empty($project_info)) {
       $this->output['status'] = 'failed';
       $this->output['message'] = 'invalid project id';
       return;
     }
 
+    $project_info = $project_info[0];
+    $this->output['project_id'] = $project_id;
+    $this->output['title'] = $project_info->title;
+    $this->output['label'] = $project_info->label;
+
     $issues = $model_issue->where(['project' => $project_id])->select();
     if (empty($issues))
       $this->output['empty'] = true;
 
-    $this->output = $issues;
+    foreach ($issues as $item) {
+      $item['issue_id'] = $item['id'];
+      unset($item['id']);
+    }
+
+    $this->output['issue_list'] = $issues;
   }
 }

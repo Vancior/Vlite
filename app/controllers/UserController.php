@@ -14,7 +14,7 @@ class UserController extends BaseController
   {
     $model_user = new Model('user');
 
-    $user_name = trim($_POST['user_name']);
+    $user_name = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
@@ -50,7 +50,7 @@ class UserController extends BaseController
   {
     $model_user = new Model('user');
 
-    $user_email = trim($_POST['user_email']);
+    $user_email = trim($_POST['email']);
     $password = md5($_POST['password']);
 
     $user_info = $model_user->where(['email' => $user_email])->select();
@@ -79,13 +79,24 @@ class UserController extends BaseController
 
   public function autoLogin()
   {
+    $model_project = new model('project');
+
     if (!isset($_SESSION)) {
       $this->output = false;
       return;
     }
 
     $this->output['user_name'] = $_SESSION['user_info']->username;
+    $this->output['email'] = $_SESSION['user_info']->email;
+    $this->output['profile'] = $_SESSION['user_info']->profile;
     $this->output['icon'] = $_SESSION['user_info']->icon;
+
+    $projects = $model_project->where(['owner' => $_SESSION['user_info']->id]);
+    foreach ($projects as $item) {
+      $item['project_id'] = $item['id'];
+      unset($item['id']);
+    }
+    $this->output['project_list'] = $projects;
   }
 
   public function info($user_id)

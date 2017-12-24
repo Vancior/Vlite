@@ -20,9 +20,9 @@ class ProjectController extends BaseController
       return;
     }
 
-    $title = trim($_POST['project_title']);
-    $description = trim($_POST['project_description']);
-    $label = trim($_POST['project_label']);
+    $title = trim($_POST['title']);
+    $description = trim($_POST['description']);
+    $label = trim($_POST['label']);
 
     if (empty($title) || empty($description)) {
       $this->output['message'] = 'empty field';
