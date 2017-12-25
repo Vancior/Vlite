@@ -14,7 +14,7 @@ class UserController extends BaseController
   {
     $model_user = new Model('user');
 
-    $user_name = trim($_POST['user_name']);
+    $user_name = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
@@ -50,7 +50,7 @@ class UserController extends BaseController
   {
     $model_user = new Model('user');
 
-    $user_email = trim($_POST['user_email']);
+    $user_email = trim($_POST['email']);
     $password = md5($_POST['password']);
 
     $user_info = $model_user->where(['email' => $user_email])->select();
@@ -68,24 +68,36 @@ class UserController extends BaseController
       $this->output['status'] = 'success';
       session_start(['cookie_lifetime' => 86400]); // start session
       $_SESSION['user_info'] = $user_info;
-      $this->autoLogin();
     }
   }
 
   public function logout()
   {
+    session_unset();
     session_destroy();
   }
 
   public function autoLogin()
   {
-    if (!isset($_SESSION)) {
+    $model_project = new model('project');
+
+    session_start(['cookie_lifetime' => 86400]);
+    if (!isset($_SESSION['user_info'])) {
       $this->output = false;
       return;
     }
 
-    $this->output['user_name'] = $_SESSION['user_info']->username;
+    $this->output['username'] = $_SESSION['user_info']->username;
+    $this->output['email'] = $_SESSION['user_info']->email;
+    $this->output['profile'] = $_SESSION['user_info']->profile;
     $this->output['icon'] = $_SESSION['user_info']->icon;
+
+    $projects = $model_project->where(['owner' => $_SESSION['user_info']->id])->select();
+    foreach ($projects as $item) {
+      $item->project_id = $item->id;
+      unset($item->id);
+    }
+    $this->output['project_list'] = $projects;
   }
 
   public function info($user_id)
@@ -96,7 +108,7 @@ class UserController extends BaseController
     if (is_string($user_id))
       $user_id = intval($user_id);
 
-    $user_info = $model_user->where(['id' => $user_id])->select();
+    $user_info = $model_user->where(['id' => $user_id])->select()->select();
     if (empty($user_info)) {
       $this->output['msg'] = 'user not exist';
       return;

@@ -14,20 +14,37 @@ class TodoController extends BaseController
   {
     $model_todo = new Model('todo');
 
-    if (!isset($_SESSION)) {
+    session_start();
+    if (!isset($_SESSION['user_info'])) {
       $this->output['status'] = 'failed';
       $this->output['message'] = 'not login';
       return;
     }
 
-    $todos = $model_todo->where(['owner' => $_SESSION['user_info']->id]);
+    $todos = $model_todo->where(['owner' => $_SESSION['user_info']->id])->order('project asc')->select();
 
     if (empty($todos)) {
       $this->output['empty'] = true;
     } else {
+      $pre_id = 0;
+      $project = [];
       foreach ($todos as $item) {
-        $project_id = $item->project;
-        // TODO: encode data into json
+        $cur_id = $item->project;
+        if ($pre_id != $cur_id) {
+          if (!empty($project))
+            $this->output[] = $project;
+          $project = ['project_id' => $cur_id];
+          $project['todo_list'] = [];
+          $pre_id = $cur_id;
+        }
+        $this->output[] = $project; // the last one
+        $item->todo_id = $item->id;
+        unset($item->id);
+        $item->issue_id = $item->issue;
+        unset($item->issue);
+        $item->project_id = $item->project;
+        unset($item->project);
+        $project['todo_list'][] = $item;
       }
     }
   }
