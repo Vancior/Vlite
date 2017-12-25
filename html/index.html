@@ -30,8 +30,8 @@
 
         function user_callback(err, json_str) {
             if (err) {
-                console.log(err);
-                alert(err.responseText)
+                console.log(err.status);
+                alert(err.responseText);
                 window.location = '/login';
             } else {
                 var user = document.getElementById("user_icon");
@@ -98,7 +98,7 @@
                 fake_ret = JSON.stringify(fake_ret);
                 callback(undefined, fake_ret)
             } else {
-                AjaxGet('./api/session/user', undefined, callback)
+                AjaxGet('/api/session/user', undefined, callback)
             }
         }
         window.onload = () => {

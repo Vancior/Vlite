@@ -33,7 +33,6 @@ function JQRequest(method, target, data, callback){
                     callback(xhr, undefined);
                 }
             }
-            callback(xhr, undefined);
         }
     });
 }
