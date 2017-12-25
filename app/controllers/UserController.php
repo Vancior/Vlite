@@ -92,7 +92,7 @@ class UserController extends BaseController
     $this->output['profile'] = $_SESSION['user_info']->profile;
     $this->output['icon'] = $_SESSION['user_info']->icon;
 
-    $projects = $model_project->where(['owner' => $_SESSION['user_info']->id]);
+    $projects = $model_project->where(['owner' => $_SESSION['user_info']->id])->select();
     foreach ($projects as $item) {
       $item['project_id'] = $item['id'];
       unset($item['id']);
@@ -108,7 +108,7 @@ class UserController extends BaseController
     if (is_string($user_id))
       $user_id = intval($user_id);
 
-    $user_info = $model_user->where(['id' => $user_id])->select();
+    $user_info = $model_user->where(['id' => $user_id])->select()->select();
     if (empty($user_info)) {
       $this->output['msg'] = 'user not exist';
       return;
