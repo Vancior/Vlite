@@ -15,7 +15,8 @@ class ProjectController extends BaseController
     $model_project = new Model('project');
     $this->output['status'] = 'failed';
 
-    if (!isset($_SESSION)) {
+    session_start();
+    if (!isset($_SESSION['user_info'])) {
       $this->output['message'] = 'not login';
       return;
     }
