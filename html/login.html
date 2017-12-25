@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6 ielt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example that shows off a blog page with a list of posts.">
+    <title>Light &ndash; Issues &ndash; Community</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="./js/ajax.js"></script>
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+    <!--<![endif]-->
+
+
+    <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/layouts/blog-old-ie.css">
+        <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="./css/blog.css">
+    <!--<![endif]-->
+    <script type="text/javascript">
+        var use_fake = false;
+        if (window.location.protocol === 'file:') {
+            use_fake = true;
+        }
+        function user_callback(err, json_str) {
+            if (err) {
+                console.log(err)
+            } else {
+                window.location = '/index';
+            }
+        }
+        function get_user_info() {
+            // AjaxGet('./api/session/user', undefined, user_callback);
+            var fake_ret = {
+                "username": "fake_user",
+                "email": "user0@fake.com",
+                "profile": "a fake user for test",
+                "icon": "./images/default.png",
+                "project_list": [
+                    {
+                        "project_id": 0,
+                        "title": "fake project"
+                    },
+                    {
+                        "project_id": 2,
+                        "title": "fake project1",
+                    }
+                ]
+            };
+            if (use_fake) {
+                fake_ret = JSON.stringify(fake_ret);
+                user_callback(Error("fake error"), undefined)
+            } else {
+                AjaxGet('/api/session/user', undefined, user_callback)
+            }
+        }
+        function signin_callback(err, result) {
+            // 登陆
+            if (err) {
+                console.log(err);
+            } else {
+                var json_obj = JSON.parse(result);
+                window.location = '/index';
+            }
+        }
+        function signup_callback(err, result) {
+            // 注册
+            if (err) {
+                console.log(err);
+            } else {
+                window.location = '/index'
+            }
+        }
+        function Signup(form_obj, callback) {
+            var queryObject = {};
+            if (form_obj) {
+                for (var i = 0; i < form_obj.length; ++i) {
+                    if (form_obj[i].name) {
+                        queryObject[form_obj[i].name] = form_obj[i].value;
+                    } else {
+                        queryObject[i.toString()] = form_obj[i].value;
+                    }
+                }
+            } else {
+                return;
+            }
+            console.log(queryObject);
+            if (queryObject["password"] !== queryObject["repassword"]) {
+                return;
+            }
+            if (use_fake) {
+                var fake_register = {
+                    "status": "success",
+                    "username": "fake_user",
+                    "email": "fake@test.com"
+                }
+                callback(JSON.stringify(fake_register));
+            } else {
+                AjaxPost('./api/user', queryObject, callback);
+            }
+        }
+        function Signin(form_obj, callback) {
+            var queryObject = {};
+            if (form_obj) {
+                for (var i = 0; i < form_obj.length; ++i) {
+                    if (form_obj[i].name) {
+                        queryObject[form_obj[i].name] = form_obj[i].value;
+                    } else {
+                        queryObject[i.toString()] = form_obj[i].value;
+                    }
+                }
+            }
+            console.log(queryObject);
+            if (use_fake) {
+                var fake_login = {
+                    "status": "success",
+                    "username": "fake_user",
+                    "email": "fake@test.com"
+                }
+                callback(JSON.stringify(fake_login));
+            } else {
+                AjaxPost('./api/session', queryObject, callback);
+            }
+        }
+        window.onload = () => {
+            document.getElementById('login_content').hidden = false;
+            // get_user_info();
+            $('#show_register').click(function (e) {
+                document.getElementById("login_content").hidden = true;
+                document.getElementById("register_content").hidden = false;
+            });
+            $('#show_login').click(function (e) {
+                document.getElementById("register_content").hidden = true;
+                document.getElementById("login_content").hidden = false;
+            });
+            var inputs = document.getElementsByTagName('input');
+            // bug fix for input email color doesn't change
+            for (var i = 0; i < inputs.length; ++i) {
+                if (inputs[i].type === 'email') {
+                    inputs[i].onfocus = (e) => e.srcElement.style.background = '#FFFFFF';
+                    inputs[i].onblur = (e) => e.srcElement.style.background = '#eae7e7';
+                }
+            }
+
+            // validate input
+            var password = document.getElementById("register_passwd");
+            var repassword = document.getElementById("register_repasswd");
+            repassword.addEventListener("input", function (event) {
+                if (repassword.value !== password.value) {
+                    repassword.setCustomValidity("两次密码不一致");
+                } else {
+                    repassword.setCustomValidity("");
+                }
+            });
+        }
+    </script>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <section id="content">
+            <form id="login_content" hidden onsubmit="Signin(this, signin_callback); return false;">
+                <div>
+                    <h1>Welcome</h1>
+                    <div>
+                        <input type="email" placeholder="Email" required name="email" />
+                    </div>
+                    <div>
+                        <input type="password" placeholder="Password" required name="password" />
+                    </div>
+                    <div class="button-style">
+                        <a id="show_register" href="javascript:void(0);">Sing up</a>
+                        <input type="submit" class="pure-button pure-button-primary" id="login_submit" value="登陆" />
+                    </div>
+                </div>
+            </form>
+            <form id="register_content" hidden onsubmit="Signup(this, signup_callback); return false;">
+                <div>
+                    <h1>Register</h1>
+                    <div>
+                        <input type="text" placeholder="Username" name="username" />
+                    </div>
+                    <div>
+                        <input type="email" id="register_email" placeholder="Email" name="email" />
+                    </div>
+                    <div>
+                        <input type="password" id="register_passwd" required placeholder="Password" required name="password" />
+                    </div>
+                    <div>
+                        <input type="password" id="register_repasswd" required placeholder="Password Again" required name="repassword" />
+                    </div>
+                    <div class="button-style">
+                        <a id="show_login" href="javascript:void(0);">Sing in</a>
+                        <input type="submit" class="pure-button pure-button-primary" id="register_submit" value="注册" />
+                    </div>
+                </div>
+            </form>
+            <!-- form -->
+
+        </section>
+        <!-- content -->
+    </div>
+    <!-- container -->
+    <script>
+    </script>
+</body>
+
+</html>
+<style>
+    .button-style {
+        margin-top: 50px;
+    }
+</style>

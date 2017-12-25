@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example that shows off a blog page with a list of posts.">
+    <title>Light &ndash; Issues &ndash; Community</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
+    
+    <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+
+    <!-- ajax.js must be placed after jquery -->
+    <script src="./js/ajax.js"></script>
+    <script type="text/javascript">
+        var use_fake = false;
+        if (window.location.protocol === 'file:') {
+            use_fake = true;
+            var css_link = document.createElement("link");
+            css_link.rel = "stylesheet";
+            css_link.href = "./css/layouts/blog.css";
+            document.head.appendChild(css_link)
+        }
+
+        function user_callback(err, json_str) {
+            if (err) {
+                console.log(err);
+                alert(err.responseText)
+                window.location = '/login';
+            } else {
+                var user = document.getElementById("user_icon");
+                var project_div = document.getElementById("project_list");
+                var json_obj = JSON.parse(json_str);
+                user.src = json_obj['icon'] || '/images/default.png';
+                user.alt = json_obj['username'];
+                var html_str = ""
+                var project_list = json_obj['project_list'];
+                var background_str = ['background:rgba(55,255,255,0.5);', 'background:rgba(255,255,55,0.5); '];
+                var a_style_str = 'style=""';
+                for (var i = 0; i < project_list.length; ++i) {
+                    var div_str = '<div class="posts"><section class="post"><header class="post-header"><h2 class="post-title"><a href="';
+                    
+                        var project_url = "./project/" + project_list[i]["project_id"];
+                    div_str += project_url + '">'
+                    div_str += project_list[i]['title'] + '</a>';
+                    div_str += "</h2>";
+                    div_str += '<p class="post-meta">By <a href="#" class="post-author">';
+                    div_str += json_obj['username'];
+                    div_str += '</a> under '
+                    // add support for tag
+                    var label_list = project_list[i]['label'] || '';
+                    label_list = label_list.split('+');
+                    var a_class_str = [' class="post-category post-category-design" ', ' class="post-category post-category-pure" '];
+                    for(var j=0;j<label_list.length ;++j){
+                        if (label_list[j].length === 0){
+                            continue;
+                        }
+                        var a_str = '<a' + a_class_str[j%a_class_str.length] +'href="#">';
+                        a_str += label_list[j];
+                        a_str += '</a>';
+                        div_str += a_str;
+                    }
+                    div_str += '</p></head><div class="post-description"><p>'
+                    div_str += project_list[i]['description'] || 'no description for this project';
+                    div_str += '</p></div></section></div>'
+                    html_str += div_str;
+                }
+                project_div.innerHTML = html_str;
+            }
+        }
+        function auto_login(callback) {
+            // AjaxGet('./api/session/user', undefined, user_callback);
+            var fake_ret = {
+                "username": "fake_user",
+                "email": "user0@fake.com",
+                "profile": "a fake user for test",
+                "icon": "./images/default.png",
+                "project_list": [
+                    {
+                        "project_id": 0,
+                        "title": "fake project",
+                        "label":"fake+test"
+                    },
+                    {
+                        "project_id": 2,
+                        "title": "fake project1",
+                        "label":"test+fake"
+                    }
+                ]
+            };
+            if (use_fake) {
+                fake_ret = JSON.stringify(fake_ret);
+                callback(undefined, fake_ret)
+            } else {
+                AjaxGet('./api/session/user', undefined, callback)
+            }
+        }
+        window.onload = () => {
+            auto_login(user_callback);
+        }
+    </script>
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+    <!--<![endif]-->
+
+
+    <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/layouts/blog-old-ie.css">
+        <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="./css/blog.css">
+    <!--<![endif]-->
+</head>
+
+<body>
+    <div class="content">
+        <div class="pure-menu pure-menu-horizontal home-menu">
+            <a class="pure-menu-heading" href="#project_list">Home</a>
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item">
+                    <form class="pure-form">
+                        <input type="text" class="pure-input-rounded">
+                        <button type="submit" class="pure-button">Search</button>
+                    </form>
+                </li>
+            </ul>
+            <img id="user_icon" width="48" height="48" alt="" class="post-avatar" src="">
+        </div>
+    </div>
+    <div class="content" id="project_list">
+    </div>
+</body>
+
+</html>
