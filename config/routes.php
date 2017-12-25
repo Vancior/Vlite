@@ -16,6 +16,7 @@ Macaw::get('api/session/user', 'UserController@autoLogin');
 Macaw::get('api/user/(:num)', 'UserController@info');
 Macaw::post('api/project', 'ProjectController@create');
 Macaw::get('api/project/(:num)/issue', 'IssueController@issue');
+Macaw::post('api/project/(:num)/issue', 'IssueController@create');
 Macaw::get('api/user/todo', 'TodoController@todo');
 Macaw::get('api/issue/(:num)', 'IssueController@info');
 

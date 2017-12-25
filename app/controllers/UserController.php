@@ -116,9 +116,49 @@ class UserController extends BaseController
 
     $user_info = $user_info[0];
     $this->output['user_id'] = $user_info->id;
-    $this->output['user_name'] = $user_info->username;
-    $this->output['user_email'] = $user_info->email;
-    $this->output['user_profile'] = $user_info->profile;
-    $this->output['user_icon'] = $user_info->icon;
+    $this->output['username'] = $user_info->username;
+    $this->output['email'] = $user_info->email;
+    $this->output['profile'] = $user_info->profile;
+    $this->output['icon'] = $user_info->icon;
+    $this->output['status'] = 'success';
+  }
+
+  public function notification()
+  {
+    $model_issue = new Model('issue');
+    $model_comment = new Model('issue_comment');
+    $model_user = new Model('user');
+    $model_project = new Model('project');
+
+    session_start();
+    if (!isset($_SESSION['user_info'])) {
+      $this->output['status'] = 'failed';
+      $this->output['message'] = 'not login';
+      return;
+    }
+
+    $user_id = $_SESSION['user_info']->id;
+
+    $issues = $model_issue->where(['owner' => $user_id])->order('create_time desc')->select();
+    foreach ($issues as $issue) {
+      $issue->issue_id = $issue->id;
+      unset($issue->id);
+      $user_name = $model_user->where(['id' => $issue->sponsor])->field('username')->select();
+      $issue->sponsor_name = $user_name[0];
+      $project_name = $model_project->where(['id' => $issue->project])->field('title')->select();
+      $issue->project_name = $project_name[0];
+    }
+    $this->output['issue_list'] = $issues;
+
+    $comments = $model_comment->where(['owner' => $user_id])->order('comment_time desc')->select();
+    foreach ($comments as $comment) {
+      $comment->comment_id = $comment->id;
+      unset($comment->id);
+      $user_name = $model_user->where(['id' => $comment->sponsor])->field('username')->select();
+      $comment->sponsor_name = $user_name[0];
+      $project_name = $model_project->where(['id' => $comment->project])->select();
+      $comment->project_name = $project_name[0];
+    }
+    $this->output['comment_list'] = $comments;
   }
 }

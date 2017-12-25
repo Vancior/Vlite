@@ -18,7 +18,7 @@
 | GET    | [api/project/(:project_id)/file](#getapiprojectproject_idfile)                                  | 下载打包后的项目文件                             |
 | POST   | [api/project/(:project_id)/issue](#postapiprojectproject_idissue)                               | 新建issue，表单提交                              |
 | GET    | [api/project/(:project_id)/issue](#getapiprojectproject_idissue)                                | 列出project中的issue                             |
-| GET    | [api/project/(:project_id)/issue/(:issue\_id)](#getapiprojectproject_idissueissue_id)           | 列出project中的某个issue                         |
+| GET    | [api/issue/(:issue\_id)](#getapiissueissue_id)           | 列出project中的某个issue                         |
 | PUT    | [api/project/(:project_id)/issue/(:issue\_id)](#putapiprojectproject_idissueissue_id)           | 修改issue                                        |
 | DELETE | [api/project/(:project_id)/issue/(:issue\_id)](#deleteapiprojectproject_idissueissue_id)        | 关闭issue                                        |
 | GET    | [api/issue?keyword=]                                                                            | 搜索lable，milestone，title，open state搜索issue |
@@ -55,36 +55,50 @@ __username:str__ , __email:str__ , __password:str__
 ```
 
 ## GET:/api/user/notification
+Vancior done
 
-功能；
+功能：
 通过session中储存的 __user_id__ 获取用户的被@的通知，自己的issue收到的回复，项目中新的issue。
 
-注意:
+注意：
 被@的通知和自己issue的回复可能重复。
+
+Vancior: 可以改成获得自己的项目下未close的issue，和在自己的issue下的comment
+comment中的owner为issue的所属者
 
 返回内容:
 
-```javascript
+```json
 {
-  "at_notificatoin":
+  "issue_list":
   [
     {
-      "comment_id":213131
-    },
-    {
-      "comment_id":213131
+      "issue_id":213131,
+      "title":"",
+      "create_time":"",
+      "description":"",
+      "milestone":"",
+      "state":1,
+      "is_read":0,
+      "sponsor":1,
+      "sponsor_name":"",
+      "project":1,
+      "project_name":""
     }
   ],
-  "issue_reply":
+  "comment_list":
   [
     {
-      "issue_id":0000,
-      "reply_list":
-      [
-        {
-          "commnet_id":02171
-        }
-      ]
+      "comment_id":12,
+      "content":"",
+      "comment_time":"",
+      "issue":1,
+      "project":1,
+      "project_name":"",
+      "sponsor":1,
+      "sponsor_name":"",
+      "owner":1,
+      "is_read":0
     }
   ]
 }
@@ -121,16 +135,17 @@ Vancior done
 ]
 ```
 
-## GET:/api/user/(:user_name)
+## GET:/api/user/(:user_id)
 
 功能:
-通过 __url__ 中的 __user_name__ ，获取目标用户的信息。
+通过 __url__ 中的 __user_id__ ，获取目标用户的信息。
 
 返回内容:
 
 ```javascript
 // 成功时 state 为 200
 {
+  "status":"success",
   "username":"test1",
   "email":"test1@test.com",
   "profile":"test account",
@@ -138,7 +153,8 @@ Vancior done
 }
 // 失败时 
 {
-
+  "status": "failed",
+  "message": "",
 }
 ```
 
@@ -215,12 +231,12 @@ __title(str)__ ， __description(str)__ ， __label(str)__
 
 返回内容:
 
-```javascript
+```json
 // 成功时。返回json，其中包含 peoject_id 以便完成自动跳转
 {
-  "project_id":"11132"
+  "project_id":11132
 }
-// 失败时 state 为 400
+// 失败时
 {
   "status":"failed",
   "message":"some error message"
@@ -238,9 +254,10 @@ __title(str)__ ， __description(str)__ ， __label(str)__
 查看项目的信息
 
 ## POST:/api/project/(:project_id)/issue
+Vancior done
 
 功能:
-通过表单提交，完成提交 __issue__
+通过表单提交title description label，完成提交 __issue__
 
 ## GET:/api/project/(:project_id)/issue
 Vancior done
@@ -256,7 +273,7 @@ Vancior done
   "title":"project name 1",
   "issue_list":[
     {
-      "issue_id":0001,
+      "issue_id":1,
       "title":"test_issue1",
       "description":"a test issue",
       "create_time":"2017-12-31 06:24:05",
@@ -293,7 +310,8 @@ Vancior done
     "comment_id": 1,
     "content":"test_comment1",
     "comment_time":"2017-12-31 06:24:06",
-    "username":"test1"
+    "username":"test1",
+    "sponsor":1
   }]
 }
 ```
@@ -325,7 +343,7 @@ __content(str)__
 // 成功时 state 为 200，返回 json 以便自动跳转
 {
   "project_id":12312,
-  "issue_id":1，
+  "issue_id":1
 }
 // 失败时 state 为 400
 {

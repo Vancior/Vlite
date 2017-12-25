@@ -34,15 +34,18 @@ class ProjectController extends BaseController
     $insert['title'] = $title;
     $insert['description'] = $description;
     $insert['label'] = $label;
-    $insert['create_time'] = date('Y-m-d H:i:s');
+    $create_time = date('Y-m-d H:i:s');
+    $insert['create_time'] = $create_time;
     $insert['owner'] = $_SESSION['user_info']->id;
     $insert['file_name'] = '';
     $insert['version'] = '';
     $insert['stars'] = 0;
 
-    if ($model_project->insert($insert))
+    if ($model_project->insert($insert)) {
       $this->output['status'] = 'success';
-    else
+      $project_info = $model_project->where(['title' => $title, 'owner' => $_SESSION['user_info']->id, 'create_time' => $create_time])->select();
+      $this->output['project_id'] = $project_info[0]->id;
+    } else
       $this->output['message'] = 'db error';
   }
 }
