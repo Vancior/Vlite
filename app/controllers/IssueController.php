@@ -43,4 +43,11 @@ class IssueController extends BaseController
 
     $this->output['issue_list'] = $issues;
   }
+
+  public function info($issue_id)
+  {
+    $model_issue = new Model('issue');
+    $model_comment = new Model('issue_comment');
+    $this->output['status'] = 'success';
+  }
 }

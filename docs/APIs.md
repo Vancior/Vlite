@@ -142,7 +142,8 @@ Vancior done
 }
 ```
 
-## POST:/api/session Vancior done
+## POST:/api/session
+Vancior done
 
 功能:
 通过表单提交，完成用户登陆。
@@ -249,7 +250,7 @@ Vancior done
 
 返回内容
 
-```javascript
+```json
 {
   "project_id":1231231,
   "title":"project name 1",
@@ -267,22 +268,34 @@ Vancior done
 }
 ```
 
-## GET:/api/project/(:project\_id)/issue/(:issue\_id)
+## GET:/api/issue/(:issue\_id)
 
 功能:
-通过 __url__ 中的 __project\_id__ 和 __issue\_id__ 获取所有的 __comment__。
+通过 __url__ 中的 __project\_id__ 和 __issue\_id__ 获取所有的 __comment__及issue本身的信息。
 
 返回内容
 
-```javascript
-[
-  {
-    "comment_id":0001,
+```json
+{
+  "issue_id":1,
+  "title": "",
+  "milestone": "",
+  "description": "",
+  "create_time": "",
+  "close_time":"",
+  "label":"",
+  "sponsor":1,
+  "project":1,
+  "owner":2,
+  "state": 1,
+  "is_read":0,
+  "comment_list": [{
+    "comment_id": 1,
     "content":"test_comment1",
     "comment_time":"2017-12-31 06:24:06",
     "username":"test1"
-  }
-]
+  }]
+}
 ```
 
 ## PUT:/api/project/(:project_id)/issue/(:issue\_id)
