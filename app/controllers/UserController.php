@@ -94,8 +94,8 @@ class UserController extends BaseController
 
     $projects = $model_project->where(['owner' => $_SESSION['user_info']->id])->select();
     foreach ($projects as $item) {
-      $item['project_id'] = $item['id'];
-      unset($item['id']);
+      $item->project_id = $item->id;
+      unset($item->id);
     }
     $this->output['project_list'] = $projects;
   }
