@@ -67,13 +67,12 @@ class UserController extends BaseController
     } else {
       $this->output['status'] = 'success';
       session_start(['cookie_lifetime' => 86400]); // start session
-      $_SESSION['user_info'] = $user_info;
-      $this->autoLogin();
     }
   }
 
   public function logout()
   {
+    session_unset();
     session_destroy();
   }
 
@@ -81,12 +80,13 @@ class UserController extends BaseController
   {
     $model_project = new model('project');
 
-    if (!isset($_SESSION)) {
+    session_start(['cookie_lifetime' => 86400]);
+    if (!isset($_SESSION['user_info'])) {
       $this->output = false;
       return;
     }
 
-    $this->output['user_name'] = $_SESSION['user_info']->username;
+    $this->output['username'] = $_SESSION['user_info']->username;
     $this->output['email'] = $_SESSION['user_info']->email;
     $this->output['profile'] = $_SESSION['user_info']->profile;
     $this->output['icon'] = $_SESSION['user_info']->icon;
