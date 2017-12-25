@@ -67,6 +67,7 @@ class UserController extends BaseController
     } else {
       $this->output['status'] = 'success';
       session_start(['cookie_lifetime' => 86400]); // start session
+      $_SESSION['user_info'] = $user_info;
     }
   }
 
