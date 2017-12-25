@@ -38,6 +38,7 @@
     margin: 0;
   }
 </style>
+<script type="text/javascript" src="./js/ajax.js"></script>
 <script type="text/javascript">
   function exec() {
     var to_exec = document.getElementById("input_script");
@@ -111,6 +112,52 @@
       }
     });
   }
+  function changeURL(input_dom_obj) {
+    window.history.replaceState({}, document.title, window.location.protocol + '//' + window.location.hostname + '/' + input_dom_obj.value);
+  }
+  function anal_url() {
+    var url_str = window.location.pathname.split('/');
+    url_str = url_str.slice(1);
+    if (url_str.length !== 0) {
+      var url_obj = {};
+      var obj_idx = undefined;
+      var keyword_list = ['project', 'issue', 'comment']
+      var index = 0;
+      while (index < url_str.length) {
+        if (keyword_list.includes(url_str[index])) {
+          url_obj[url_str[index]] = true;
+          obj_idx = url_str[index];
+        } else{
+          if (obj_idx != undefined) {
+            url_obj[obj_idx] = url_str[index];
+            obj_idx = undefined;
+          }else{
+            url_obj[url_str[index]] = true;
+          }
+        }
+        index += 1;
+      }
+      return url_obj;
+    }
+  }
+  function api_url(){
+    var url_obj = anal_url();
+    var api_url = window.location.protocol + '//' + window.location.hostname + '/api';
+    if('project' in url_obj && url_obj['project'] !== true){
+      api_url += '/project/' +  url_obj['project'];
+    }
+    if('issue' in url_obj){
+      if (url_obj['issue'] !== true)
+        api_url += '/issue/' +  url_obj['issue'];
+      else
+      api_url += '/issue'
+    }
+    if('comment' in url_obj){
+      api_url += '/comment';
+    }
+    console.log(api_url);
+    return api_url;
+  }
 </script>
 
 <body>
@@ -166,7 +213,9 @@
       <div class="row">
         <div class="col-md-8">
           <div class="card">
-            hello
+            <label for="url">url:</label>
+            <input type="text" id='url' oninput="changeURL(this);">
+            <div><button onclick="api_url();">have fun</button></div>
             <textarea id="input_script" rows="20">$.ajax({
             async:true,
             method:'GET',
