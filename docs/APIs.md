@@ -26,6 +26,7 @@
 | POST   | [api/project/(:project\_id)/issue/(:issue\_id)/comment](#postapiproject_idissueissue_idcomment) | 回复issue                                        |
 | POST   | [api/project/(:project_id)/todo](#postapiprojectproject_idtodo)                                 | 从issue中新建todo，隐式表单提交                  |
 | GET    | [api/project/(:project_id)/download](#getapiprojectproject_iddownload) | 下载project的文件|
+| GET    | [api/project/search?keyword=xxx&page=1]                        | 搜索项目
 
 ## POST:/api/user
 Vancior done
@@ -368,3 +369,25 @@ __title(str)__ ， __content(str)__。
 
 功能：
 通过project_id下载所属的文件
+
+## GET:/api/project/search?keyword=xxx&page=1
+
+功能：
+通过GET请求搜索满足条件的project
+
+```json
+[
+  {
+    "project_id": 1,
+    "title":"",
+    "description":"",
+    "label":"",
+    "create_time":"",
+    "owner":"",
+    "username":"",
+    "file_name":"",
+    "version":"",
+    "stars":12
+  }
+]
+```

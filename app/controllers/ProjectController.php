@@ -89,4 +89,23 @@ class ProjectController extends BaseController
       exit();
     }
   }
+
+  public function search()
+  {
+    $model_project = new Model('project');
+    $model_user = new Model('user');
+
+    $keyword = trim($_GET['keyword']);
+    $page = intval($_GET['page']);
+
+    $projects = $model_project->where("title like '%$keyword%'")->page($page)->order('stars desc')->select();
+    foreach ($projects as $item) {
+      $item->project_id = $item->id;
+      unset($item->id);
+      $user_info = $model_user->where(['id' => $item->owner])->select();
+      $item->username = $user_info[0]->username;
+    }
+
+    $this->output = $projects;
+  }
 }

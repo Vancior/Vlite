@@ -24,7 +24,7 @@ class Model
   private $order;
   private $join;
   private $on;
-  private $limit = 30;
+  private $limit = 15;
   private $offset = 0;
   private $lock = false;
 
