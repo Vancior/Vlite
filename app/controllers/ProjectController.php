@@ -48,4 +48,41 @@ class ProjectController extends BaseController
     } else
       $this->output['message'] = 'db error';
   }
+
+  public function download($project_id)
+  {
+    $model_project = new Model('project');
+    $this->output['status'] = 'success';
+
+    if (is_string($project_id))
+      $project_id = intval($project_id);
+
+    $project_info = $model_project->where(['id' => $project_id])->select();
+    if (empty($project_info)) {
+      $this->output['status'] = 'failed';
+      $this->output['message'] = 'invalid project id';
+      return;
+    }
+    $project_info = $project_info[0];
+
+    if (empty($project_info->file_name)) {
+      header('HTTP/1.1 404 Not Found');
+      exit();
+    }
+
+    $path = BASE_PATH . '/upload/' . $project_info->file_name;
+    if (!file_exists($path)) {
+      header('HTTP/1.1 404 Not Found');
+      exit();
+    } else {
+      $file = fopen($path, "r");
+      Header("Content-type: application/octet-stream");
+      Header("Accept-Ranges: bytes");
+      Header("Accept-Length: " . filesize($path));
+      Header("Content-Disposition: attachment; filename=" . $path);
+      echo fread($file, filesize($path));
+      fclose($file);
+      exit ();
+    }
+  }
 }

@@ -19,12 +19,13 @@
 | POST   | [api/project/(:project_id)/issue](#postapiprojectproject_idissue)                               | 新建issue，表单提交                              |
 | GET    | [api/project/(:project_id)/issue](#getapiprojectproject_idissue)                                | 列出project中的issue                             |
 | GET    | [api/issue/(:issue\_id)](#getapiissueissue_id)           | 列出project中的某个issue                         |
-| PUT    | [api/project/(:project_id)/issue/(:issue\_id)](#putapiprojectproject_idissueissue_id)           | 修改issue                                        |
+| POST   | [api/issue/(:issue\_id)/update](#putapiprojectproject_idissueissue_id)           | 修改issue                                        |
 | DELETE | [api/project/(:project_id)/issue/(:issue\_id)](#deleteapiprojectproject_idissueissue_id)        | 关闭issue                                        |
 | GET    | [api/issue?keyword=]                                                                            | 搜索lable，milestone，title，open state搜索issue |
 | GET    | [api/project?name=&label=&owner=]                                                               | 根据name，label，owner搜索project                |
 | POST   | [api/project/(:project\_id)/issue/(:issue\_id)/comment](#postapiproject_idissueissue_idcomment) | 回复issue                                        |
 | POST   | [api/project/(:project_id)/todo](#postapiprojectproject_idtodo)                                 | 从issue中新建todo，隐式表单提交                  |
+| GET    | [api/project/(:project_id)/download](#getapiprojectproject_iddownload) | 下载project的文件|
 
 ## POST:/api/user
 Vancior done
@@ -362,3 +363,8 @@ __title(str)__ ， __content(str)__。
 
 前端逻辑:
 将 __issue__ 、 __comment__ 中的内容自动填入到 __content__ 中。
+
+## GET:/api/project/(:project_id)/download
+
+功能：
+通过project_id下载所属的文件

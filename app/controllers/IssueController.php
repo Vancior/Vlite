@@ -76,8 +76,8 @@ class IssueController extends BaseController
     foreach ($comments as $item) {
       $item->comment_id = $item->id;
       unset($item->id);
-      $user_name = $model_user->where(['id' => $item->sponsor])->field('username')->select();
-      $item->username = $user_name[0];
+      $user_info = $model_user->where(['id' => $item->sponsor])->select();
+      $item->username = $user_info[0]->username;
     }
 
     $this->output->comment_list = $comments;

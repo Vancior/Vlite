@@ -13,7 +13,7 @@ class CommentController extends BaseController
   public function create($issue_id)
   {
     $model_issue = new Model('issue');
-    $model_comment = new Model('comment');
+    $model_comment = new Model('issue_comment');
     $this->output['status'] = 'success';
 
     if (is_string($issue_id))
