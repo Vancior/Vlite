@@ -61,6 +61,7 @@ class UserController extends BaseController
       return;
     }
     $user_info = $user_info[0];
+    $user_info->id = intval($user_info->id);
 
     if ($password != $user_info->password) {
       $this->output['message'] = 'password not correct';

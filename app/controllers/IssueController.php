@@ -116,8 +116,8 @@ class IssueController extends BaseController
     $insert['create_time'] = $create_time;
     $insert['label'] = $_POST['label'];
     $insert['sponsor'] = $_SESSION['user_info']->id;
-    $insert['project'] = $project_info->id;
-    $insert['owner'] = $project_info->owner;
+    $insert['project'] = intval($project_info->id);
+    $insert['owner'] = intval($project_info->owner);
     $insert['state'] = 1;
     $insert['is_read'] = 0;
 
