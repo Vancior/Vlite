@@ -12,6 +12,7 @@ class BaseController
 {
   public $view;
   public $output = [];
+  public $exit = false;
 
   public function __construct()
   {
@@ -26,6 +27,8 @@ class BaseController
 //      extract($view->data);
 //      require $view->view;
 //    }
+    if ($this->exit)
+      exit();
     header('Content-Type:application/json;charset=utf-8');
     if ($this->output === true)
       header('HTTP/1.1 200 OK');

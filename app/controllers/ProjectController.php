@@ -67,22 +67,26 @@ class ProjectController extends BaseController
 
     if (empty($project_info->file_name)) {
       header('HTTP/1.1 404 Not Found');
+      $this->exit = true;
       exit();
     }
 
     $path = BASE_PATH . '/upload/' . $project_info->file_name;
     if (!file_exists($path)) {
       header('HTTP/1.1 404 Not Found');
+      $this->exit = true;
       exit();
     } else {
+      $this->exit = true;
       $file = fopen($path, "r");
-      Header("Content-type: application/octet-stream");
-      Header("Accept-Ranges: bytes");
-      Header("Accept-Length: " . filesize($path));
-      Header("Content-Disposition: attachment; filename=" . $path);
+      header("HTTP/1.1 200");
+      header("Content-type: application/octet-stream");
+      header("Accept-Ranges: bytes");
+      header("Accept-Length: " . filesize($path));
+      header("Content-Disposition: attachment; filename=" . $project_info->file_name);
       echo fread($file, filesize($path));
       fclose($file);
-      exit ();
+      exit();
     }
   }
 }
