@@ -39,8 +39,8 @@ class CommentController extends BaseController
     $insert['sponsor'] = $_SESSION['user_info']->id;
     $insert['comment_time'] = date('Y-m-d H:i:s');
     $insert['issue'] = $issue_id;
-    $insert['project'] = $issue_info->project;
-    $insert['owner'] = $issue_info->sponsor;
+    $insert['project'] = intval($issue_info->project);
+    $insert['owner'] = intval($issue_info->sponsor);
     $insert['is_read'] = 0;
 
     if (!$model_comment->insert($insert)) {
