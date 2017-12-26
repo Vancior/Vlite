@@ -37,8 +37,8 @@ class IssueController extends BaseController
       $this->output['empty'] = true;
 
     foreach ($issues as $item) {
-      $item['issue_id'] = $item['id'];
-      unset($item['id']);
+      $item->issue_id = $item->id;
+      unset($item->id);
     }
 
     $this->output['issue_list'] = $issues;
