@@ -19,6 +19,7 @@ Macaw::get('api/project/(:num)/issue', 'IssueController@issue');
 Macaw::post('api/project/(:num)/issue', 'IssueController@create');
 Macaw::get('api/user/todo', 'TodoController@todo');
 Macaw::get('api/issue/(:num)', 'IssueController@info');
+Macaw::post('api/issue/(:num)/comment', 'CommentController@create');
 
 /*
  * Warning: 这里不要直接使用(:all)，并且使用(:any)的情况下也有可能产生冲突
