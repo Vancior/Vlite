@@ -80,7 +80,7 @@ class IssueController extends BaseController
       $item->username = $user_name[0];
     }
 
-    $this->output['comment_list'] = $comments;
+    $this->output->comment_list = $comments;
   }
 
   public function create($project_id)
