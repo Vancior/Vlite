@@ -68,10 +68,10 @@ class IssueController extends BaseController
     $this->output = $issue_info;
 
     $comments = $model_comment->where(['issue' => $issue_id])->select();
-    if (empty($comments)) {
-      $this->output['empty'] = true;
-      return;
-    }
+//    if (empty($comments)) {
+//      $this->output['empty'] = true;
+//      return;
+//    }
 
     foreach ($comments as $item) {
       $item->comment_id = $item->id;
