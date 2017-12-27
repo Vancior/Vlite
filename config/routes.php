@@ -8,6 +8,9 @@
 
 use NoahBuscher\Macaw\Macaw;
 
+Macaw::get('/', function () {
+  header('location: /index');
+});
 Macaw::get('api/(:num)', 'HomeController@home');
 Macaw::post('api/user', 'UserController@signUp');
 Macaw::post('api/session', 'UserController@login');
