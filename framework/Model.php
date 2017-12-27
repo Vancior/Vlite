@@ -99,7 +99,7 @@ class Model
 
   public function order($order)
   {
-    if (preg_match('/\S*\s*(desc|asc)/i', $order))
+    if (!preg_match('/\S*\s*(desc|asc)/i', $order))
       throw new \UnexpectedValueException('Order String Not Correct');
 
     $this->order = $order;
