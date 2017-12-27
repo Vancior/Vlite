@@ -158,7 +158,7 @@ class ProjectController extends BaseController
     }
 
     if ($_FILES['file']['error'] > 0) {
-      $this->output['message'] = "get error ${_FILES['file']['error']}";
+      $this->output['message'] = 'get error' . $_FILES['file']['error'];
     } else {
       $this->output['status'] = 'success';
       $_FILES['file']['name'] = str_replace('/', '-', $_FILES['file']['name']);
@@ -172,7 +172,7 @@ class ProjectController extends BaseController
       $update['file_name'] = $_FILES['file']['name'];
       $update['version'] = $version;
 
-      if (!$model_project->where(['id'=>$project_id])->update($update)) {
+      if (!$model_project->where(['id' => $project_id])->update($update)) {
         $this->output['status'] = 'failed';
         $this->output['message'] = 'db error';
         $this->output['update'] = $update;
