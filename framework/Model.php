@@ -198,6 +198,26 @@ class Model
     return Db::multi_query($query);
   }
 
+  public function update($data)
+  {
+    if (!is_array($data))
+      throw new \InvalidArgumentException('Array Required');
+
+    $columns = '';
+    $query = '';
+    foreach ($data as $key => $value) {
+      $query .= ', ' . $this->addQuotation($key) . ' = ';
+      if (is_string($value))
+        $query .= '\'' . $value . '\'';
+      else
+        $query .= $value;
+    }
+    $query = "UPDATE $this->table SET " . substr($query, 2) . " " . $this->where;
+
+    $this->reset_query();
+    return Db::query($query);
+  }
+
   public function delete($table = null)
   {
     if (empty($this->where)) {
