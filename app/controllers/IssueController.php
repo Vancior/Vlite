@@ -31,6 +31,14 @@ class IssueController extends BaseController
     $this->output['project_id'] = $project_id;
     $this->output['title'] = $project_info->title;
     $this->output['label'] = $project_info->label;
+    $this->output['description'] = $project_info->description;
+    $this->output['file_name'] = $project_info->file_name;
+    $this->output['version'] = $project_info->version;
+    $this->output['label'] = $project_info->label;
+    $this->output['create_time'] = $project_info->create_time;
+    $this->output['stars'] = $project_info->stars;
+    $model_user = new Model('user');
+    $this->output['owner'] = ($model_user->where(['id' => $project_info->owner])->select())[0]->username;
 
     $issues = $model_issue->where(['project' => $project_id])->select();
     if (empty($issues))
