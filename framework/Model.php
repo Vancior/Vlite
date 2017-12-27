@@ -212,7 +212,7 @@ class Model
       else
         $query .= $value;
     }
-    $query = "UPDATE $this->table SET " . substr($query, 2) . " " . $this->where;
+    $query = "UPDATE $this->table SET " . substr($query, 2) . " WHERE " . $this->where;
 
     $this->reset_query();
     return Db::query($query);
