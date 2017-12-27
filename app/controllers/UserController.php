@@ -110,7 +110,7 @@ class UserController extends BaseController
     if (is_string($user_id))
       $user_id = intval($user_id);
 
-    $user_info = $model_user->where(['id' => $user_id])->select()->select();
+    $user_info = $model_user->where(['id' => $user_id])->select();
     if (empty($user_info)) {
       $this->output['msg'] = 'user not exist';
       return;

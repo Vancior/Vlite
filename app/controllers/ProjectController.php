@@ -95,8 +95,14 @@ class ProjectController extends BaseController
     $model_project = new Model('project');
     $model_user = new Model('user');
 
-    $keyword = trim($_GET['keyword']);
-    $page = intval($_GET['page']);
+    if (isset($_GET['keyword']))
+      $keyword = trim($_GET['keyword']);
+    else
+      $keyword = '';
+    if (isset($_GET['page']))
+      $page = intval($_GET['page']);
+    else
+      $page = 1;
 
     $projects = $model_project->where("title like '%$keyword%'")->page($page)->order('stars desc')->select();
     foreach ($projects as $item) {
