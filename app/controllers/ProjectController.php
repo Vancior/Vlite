@@ -103,8 +103,13 @@ class ProjectController extends BaseController
       $page = intval($_GET['page']);
     else
       $page = 1;
+    if (isset($_GET['label']))
+      $label = trim($_GET['label']);
+    else
+      $label = '';
 
-    $projects = $model_project->where("title like '%$keyword%'")->page($page)->order('stars desc')->select();
+    $projects = $model_project->where("title like '%$keyword%' and label like '%$label%'")->page($page)
+        ->order('stars desc')->select();
     foreach ($projects as $item) {
       $item->project_id = $item->id;
       unset($item->id);
