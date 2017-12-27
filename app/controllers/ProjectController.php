@@ -71,7 +71,7 @@ class ProjectController extends BaseController
       exit();
     }
 
-    $path = BASE_PATH . '/upload/' . $project_info->file_name;
+    $path = BASE_PATH . '/upload/' . $project_info->id . '-' . $project_info->file_name;
     if (!file_exists($path)) {
       header('HTTP/1.1 404 Not Found');
       $this->exit = true;
@@ -103,8 +103,13 @@ class ProjectController extends BaseController
       $page = intval($_GET['page']);
     else
       $page = 1;
+    if (isset($_GET['label']))
+      $label = trim($_GET['label']);
+    else
+      $label = '';
 
-    $projects = $model_project->where("title like '%$keyword%'")->page($page)->order('stars desc')->select();
+    $projects = $model_project->where("title like '%$keyword%' and label like '%$label%'")->page($page)
+        ->order('stars desc')->select();
     foreach ($projects as $item) {
       $item->project_id = $item->id;
       unset($item->id);
@@ -113,5 +118,65 @@ class ProjectController extends BaseController
     }
 
     $this->output = $projects;
+  }
+
+  public function upload($project_id)
+  {
+    $model_project = new Model('project');
+    $this->output['status'] = 'failed';
+
+    if (is_string($project_id))
+      $project_id = intval($project_id);
+
+    if (!isset($_POST['version'])) {
+      $this->output['message'] = 'no version';
+      return;
+    }
+    $version = trim($_POST['version']);
+
+    session_start();
+    if (!isset($_SESSION['user_info'])) {
+      $this->output['message'] = 'not login';
+      return;
+    }
+
+    $project_info = $model_project->where(['id' => $project_id])->select();
+    if (empty($project_info)) {
+      $this->output['message'] = 'invalid project id';
+      return;
+    }
+
+    $project_info = $project_info[0];
+    if ($_SESSION['user_info']->id != $project_info->owner) {
+      $this->output['message'] = 'not owner';
+      return;
+    }
+
+    if (!isset($_FILES['file'])) {
+      $this->output['message'] = 'no file';
+      return;
+    }
+
+    if ($_FILES['file']['error'] > 0) {
+      $this->output['message'] = 'get error' . $_FILES['file']['error'];
+    } else {
+      $this->output['status'] = 'success';
+      $_FILES['file']['name'] = str_replace('/', '-', $_FILES['file']['name']);
+      $this->output['file_name'] = $_FILES['file']['name'];
+      $this->output['file_type'] = $_FILES['file']['type'];
+
+      move_uploaded_file($_FILES['file']['tmp_name'],
+          BASE_PATH . '/upload/' . $project_id . '-' . $_FILES['file']['name']);
+
+      $update = [];
+      $update['file_name'] = $_FILES['file']['name'];
+      $update['version'] = $version;
+
+      if (!$model_project->where(['id' => $project_id])->update($update)) {
+        $this->output['status'] = 'failed';
+        $this->output['message'] = 'db error';
+        $this->output['update'] = $update;
+      }
+    }
   }
 }

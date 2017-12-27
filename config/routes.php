@@ -8,6 +8,9 @@
 
 use NoahBuscher\Macaw\Macaw;
 
+Macaw::get('/', function () {
+  header('location: /index');
+});
 Macaw::get('api/(:num)', 'HomeController@home');
 Macaw::post('api/user', 'UserController@signUp');
 Macaw::post('api/session', 'UserController@login');
@@ -22,6 +25,7 @@ Macaw::get('api/issue/(:num)', 'IssueController@info');
 Macaw::post('api/issue/(:num)/comment', 'CommentController@create');
 Macaw::get('api/project/search', 'ProjectController@search');
 Macaw::get('project/(:num)/download', 'ProjectController@download');
+Macaw::post('api/project/(:num)/upload', 'ProjectController@upload');
 
 /*
  * Warning: 这里不要直接使用(:all)，并且使用(:any)的情况下也有可能产生冲突
