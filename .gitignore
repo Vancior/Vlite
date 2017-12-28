@@ -3,7 +3,8 @@ vendor
 session
 !session/index.html
 .vscode
-/html/
-/js/
-/css/
-/images/
+upload
+!upload/index.html
+images
+!images/index.html
+

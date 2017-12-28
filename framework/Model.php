@@ -44,6 +44,8 @@ class Model
       $select .= 'ON ' . $this->on . ' ';
     if (!empty($this->where))
       $select .= 'WHERE ' . $this->where . ' ';
+    if (!empty($this->order))
+      $select .= 'ORDER BY ' . $this->order . ' ';
     if ($this->lock)
       $select .= 'FOR UPDATE';
 

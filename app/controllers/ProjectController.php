@@ -103,13 +103,14 @@ class ProjectController extends BaseController
       $page = intval($_GET['page']);
     else
       $page = 1;
+/*
     if (isset($_GET['label']))
       $label = trim($_GET['label']);
     else
       $label = '';
+*/
 
-    $projects = $model_project->where("title like '%$keyword%' and label like '%$label%'")->page($page)
-        ->order('stars desc')->select();
+    $projects = $model_project->join('(select username, id as user_id from user) temp')->on('project.owner = temp.user_id')->where("(title like '%$keyword%') OR (label like '%$keyword%') or (username like '%$keyword%')")->page($page)->order('stars desc, create_time desc')->select();
     foreach ($projects as $item) {
       $item->project_id = $item->id;
       unset($item->id);

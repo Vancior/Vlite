@@ -3,19 +3,29 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A layout example that shows off a blog page with a list of posts.">
-    <title>Light &ndash; Issues &ndash; Community</title>
+    <title>Source - Lite</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
-    
-    <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+ <link href="https://cdn.bootcss.com/pure/1.0.0/pure-min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+        <link rel="stylesheet" href="css/layouts/blog-old-ie.css">
+    <![endif]-->
+
+    <!--[if gt IE 8]><!-->
+    <link href="https://cdn.bootcss.com/pure/1.0.0/pure-min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/blog.css">
+    <!--<![endif]-->
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
         crossorigin="anonymous"></script>
-
     <!-- ajax.js must be placed after jquery -->
     <script src="./js/ajax.js"></script>
     <script type="text/javascript">
@@ -30,10 +40,20 @@
 
         function user_callback(err, json_str) {
             if (err) {
-                console.log(err.status);
-                alert(err.responseText);
-                window.location = '/login';
+                console.log(err.responseText);
+                // window.location = '/login';
+                with (document.getElementById('sign_out')) {
+                    href = '/login';
+                    innerHTML = 'Sign in';
+                };
+                document.getElementById('new_project_div').hidden = true;
+                AjaxGet('/api/project/search', {'page':1}, search_callback);
             } else {
+                with (document.getElementById('sign_out')) {
+                    href = '/login';
+                    innerHTML = 'Sign out';
+                };
+                document.getElementById('new_project_div').hidden = false;
                 var user = document.getElementById("user_icon");
                 var project_div = document.getElementById("project_list");
                 var json_obj = JSON.parse(json_str);
@@ -44,9 +64,15 @@
                 var background_str = ['background:rgba(55,255,255,0.5);', 'background:rgba(255,255,55,0.5); '];
                 var a_style_str = 'style=""';
                 for (var i = 0; i < project_list.length; ++i) {
-                    var div_str = '<div class="posts"><section class="post"><header class="post-header"><h2 class="post-title"><a href="';
-                    
-                        var project_url = "./project/" + project_list[i]["project_id"];
+                    var div_str = '<div class="posts">'
+
+                    div_str += '<h1 class="content-subhead">';
+                    div_str += 'create at ' + project_list[i]['create_time'];
+                    div_str += '</h1>' // end for h1
+
+                    div_str += '<section class="post"><header class="post-header"><h2 class="post-title"><a href="';
+
+                    var project_url = "/project/" + project_list[i]["project_id"];
                     div_str += project_url + '">'
                     div_str += project_list[i]['title'] + '</a>';
                     div_str += "</h2>";
@@ -57,68 +83,156 @@
                     var label_list = project_list[i]['label'] || '';
                     label_list = label_list.split('+');
                     var a_class_str = [' class="post-category post-category-design" ', ' class="post-category post-category-pure" '];
-                    for(var j=0;j<label_list.length ;++j){
-                        if (label_list[j].length === 0){
+                    for (var j = 0; j < label_list.length; ++j) {
+                        if (label_list[j].length === 0) {
                             continue;
                         }
-                        var a_str = '<a' + a_class_str[j%a_class_str.length] +'href="#">';
+                        var a_str = '<a' + a_class_str[j % a_class_str.length] + 'href="#">';
                         a_str += label_list[j];
                         a_str += '</a>';
                         div_str += a_str;
                     }
                     div_str += '</p></head><div class="post-description"><p>'
                     div_str += project_list[i]['description'] || 'no description for this project';
-                    div_str += '</p></div></section></div>'
+                    div_str += '</p></div>'
+
+                    if (project_list[i]['file_name'] && project_list[i]['file_name'].length > 0) {
+                        div_str += '<a class="btn btn-light" href="/project/'
+                        div_str += project_list[i]['project_id'] + '/download">'
+                        // div_str += project_list[i]['file_name'] + '</a>';
+                        div_str += 'Download ZIP' + '</a>';
+                    }
+
+                    div_str += '</section></div>'
+                    html_str += div_str;
+                }
+                project_div.innerHTML = html_str;
+                with (document.getElementById('sign_out')) {
+                    onclick = (event) => {
+                        AjaxDelete('/api/session', undefined, (err, data) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log(data);
+                                location.reload();
+                            }
+                        });
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+            }
+        }
+        function auto_login(callback) {
+            AjaxGet('/api/session/user', undefined, callback)
+        }
+        function form_callback(err, data) {
+            if (err) {
+                console.log(err.responseText);
+            } else {
+                // success
+                $('#new_project').modal('hide'); // auto hide
+                auto_login(user_callback);
+            }
+        }
+        function create_project(form_obj, callback) {
+            var queryObject = {};
+            if (form_obj) {
+                for (var i = 0; i < form_obj.length; ++i) {
+                    if (form_obj[i].name) {
+                        queryObject[form_obj[i].name] = form_obj[i].value;
+                    } else {
+                        queryObject[i.toString()] = form_obj[i].value;
+                    }
+                }
+            }
+            console.log(queryObject);
+            AjaxPost('/api/project', queryObject, callback);
+        }
+        function search_callback(err, data) {
+            if (err) {
+
+            } else {
+                var json_obj = JSON.parse(data);
+                console.log(json_obj); document.getElementById('new_project_div').hidden = true;
+
+                var project_div = document.getElementById("project_list");
+
+                var html_str = ""
+                var project_list = json_obj;
+                var background_str = ['background:rgba(55,255,255,0.5);', 'background:rgba(255,255,55,0.5); '];
+                var a_style_str = 'style=""';
+                for (var i = 0; i < project_list.length; ++i) {
+                    var div_str = '<div class="posts">'
+
+                    div_str += '<h1 class="content-subhead">';
+                    div_str += 'create at ' + project_list[i]['create_time'];
+                    div_str += '</h1>' // end for h1
+
+                    div_str += '<section class="post"><header class="post-header"><h2 class="post-title"><a href="';
+
+                    var project_url = "/project/" + project_list[i]["project_id"];
+                    div_str += project_url + '">'
+                    div_str += project_list[i]['title'] + '</a>';
+                    div_str += "</h2>";
+                    div_str += '<p class="post-meta">By <a href="#" class="post-author">';
+                    div_str += project_list[i]['username'];
+                    div_str += '</a> under '
+                    // add support for tag
+                    var label_list = project_list[i]['label'] || '';
+                    label_list = label_list.split('+');
+                    var a_class_str = [' class="post-category post-category-design" ', ' class="post-category post-category-pure" '];
+                    for (var j = 0; j < label_list.length; ++j) {
+                        if (label_list[j].length === 0) {
+                            continue;
+                        }
+                        var a_str = '<a' + a_class_str[j % a_class_str.length] + 'href="#">';
+                        a_str += label_list[j];
+                        a_str += '</a>';
+                        div_str += a_str;
+                    }
+                    div_str += '</p></head><div class="post-description"><p>'
+                    div_str += project_list[i]['description'] || 'no description for this project';
+                    div_str += '</p></div>'
+
+                    if (project_list[i]['file_name'] && project_list[i]['file_name'].length > 0) {
+                        div_str += '<a class="btn btn-light" href="/project/'
+                        div_str += project_list[i]['project_id'] + '/download">'
+                        // div_str += project_list[i]['file_name'] + '</a>';
+                        div_str += 'Download ZIP' + '</a>';
+                    }
+
+                    div_str += '</section></div>'
                     html_str += div_str;
                 }
                 project_div.innerHTML = html_str;
             }
         }
-        function auto_login(callback) {
-            // AjaxGet('./api/session/user', undefined, user_callback);
-            var fake_ret = {
-                "username": "fake_user",
-                "email": "user0@fake.com",
-                "profile": "a fake user for test",
-                "icon": "./images/default.png",
-                "project_list": [
-                    {
-                        "project_id": 0,
-                        "title": "fake project",
-                        "label":"fake+test"
-                    },
-                    {
-                        "project_id": 2,
-                        "title": "fake project1",
-                        "label":"test+fake"
+        function search(form_obj, callback) {
+            var queryObject = {};
+            if (form_obj) {
+                for (var i = 0; i < form_obj.length; ++i) {
+                    if (form_obj[i].name) {
+                        queryObject[form_obj[i].name] = form_obj[i].value;
+                    } else {
+                        queryObject[i.toString()] = form_obj[i].value;
                     }
-                ]
-            };
-            if (use_fake) {
-                fake_ret = JSON.stringify(fake_ret);
-                callback(undefined, fake_ret)
-            } else {
-                AjaxGet('/api/session/user', undefined, callback)
+                }
             }
+            console.log(queryObject);
+            var query_str = '?'
+            for(var key in queryObject){
+                query_str += key;
+                query_str += '=';
+                query_str += queryObject[key];
+            }
+            AjaxGet('/api/project/search', queryObject, callback);
         }
         window.onload = () => {
             auto_login(user_callback);
+            // document.getElementById('textarea_ipt').style.width = document.getElementById('name').style.width;
         }
     </script>
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
-    <![endif]-->
-    <!--[if gt IE 8]><!-->
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
-    <!--<![endif]-->
-
-
-    <!--[if lte IE 8]>
-            <link rel="stylesheet" href="css/layouts/blog-old-ie.css">
-        <![endif]-->
-    <!--[if gt IE 8]><!-->
-    <link rel="stylesheet" href="./css/blog.css">
-    <!--<![endif]-->
 </head>
 
 <body>
@@ -127,16 +241,65 @@
             <a class="pure-menu-heading" href="#project_list">Home</a>
             <ul class="pure-menu-list">
                 <li class="pure-menu-item">
-                    <form class="pure-form">
-                        <input type="text" class="pure-input-rounded">
+                    <form class="pure-form"  onsubmit="search(this, search_callback);return false;">
+                        <input type="text" required class="pure-input-rounded" name="keyword">
                         <button type="submit" class="pure-button">Search</button>
                     </form>
                 </li>
             </ul>
             <img id="user_icon" width="48" height="48" alt="" class="post-avatar" src="">
+            <a id='sign_out' style="text-decoration:none;" class="post-avatar pure-button" href="#">Sign in</a>
         </div>
     </div>
-    <div class="content" id="project_list">
+    <div style="padding-left: 4em; padding-right: 4em; padding-top:0; padding-bottom:0;">
+        <div class="content" id="new_project_div" hidden>
+       		<button id="new_project_btn" type="button" class="pure-button" data-toggle="modal" data-target="#new_project">add project</button>
+    	</div>
+	<div class="content" id="project_list">
+	</div>
+    </div>
+    <!-- 模态框 -->
+    <div class="modal fade" id="new_project">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">New project</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div class="content">
+                        <h2>Create a new repository</h2>
+                        <font>A repository contains all the files for your project, including the revision history.</font>
+                        <div class=" border-style2">
+                            <form id="create_project" class="pure-form pure-form-stacked" onsubmit="create_project(this, form_callback); return false;">
+                                <fieldset>
+                                    <div class="pure-g">
+                                        <div class="pure-u-1 ">
+                                            <label for="name">repository name</label>
+                                            <input id="name" required name="title" class="pure-u-23-24" type="text">
+                                        </div>
+
+                                        <div class="pure-u-1 ">
+                                            <label for="description">description</label>
+                                            <!-- <input id="description" required name="description" class="pure-u-23-24" type="textarea"> -->
+                                            <textarea id="textarea_ipt" form="create_project" required style="width:96%;" rows="5" name="description"></textarea>
+                                        </div>
+                                        <div class="pure-u-1 ">
+                                            <label for="label">label</label>
+                                            <input id="label" required name="label" class="pure-u-23-24" type="text">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="pure-button pure-button-primary button-type">Create</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

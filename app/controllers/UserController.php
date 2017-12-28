@@ -94,7 +94,7 @@ class UserController extends BaseController
     $this->output['profile'] = $_SESSION['user_info']->profile;
     $this->output['icon'] = $_SESSION['user_info']->icon;
 
-    $projects = $model_project->where(['owner' => $_SESSION['user_info']->id])->select();
+    $projects = $model_project->where(['owner' => $_SESSION['user_info']->id])->order('create_time desc')->select();
     foreach ($projects as $item) {
       $item->project_id = $item->id;
       unset($item->id);
