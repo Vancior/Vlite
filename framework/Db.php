@@ -37,6 +37,7 @@ class Db
   public static function query($sql)
   {
 //    echo $sql;
+    $sql = mysqli_escape_string(self::$db->mysqli, $sql);
     $result = self::$db->mysqli->query($sql);
     if ($result === false)
       return false;
