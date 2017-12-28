@@ -11,8 +11,8 @@ namespace Vlite;
 
 class Db
 {
-  private $mysqli;
-  private static $db;
+  public $mysqli;
+  public static $db;
 
   public function __construct()
   {
@@ -37,7 +37,6 @@ class Db
   public static function query($sql)
   {
 //    echo $sql;
-    $sql = mysqli_escape_string(self::$db->mysqli, $sql);
     $result = self::$db->mysqli->query($sql);
     if ($result === false)
       return false;

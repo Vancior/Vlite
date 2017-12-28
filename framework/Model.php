@@ -159,8 +159,10 @@ class Model
     $columns = '';
     $query = '';
     foreach ($data as $key => $value) {
-      if (is_string($value))
+      if (is_string($value)) {
+        $value = Db::$db->mysqli->real_escape_string($value);
         $query .= ', ' . '\'' . $value . '\'';
+      }
       else
         $query .= ', ' . $value;
       $columns .= ', ' . $this->addQuotation($key);
