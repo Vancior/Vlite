@@ -7,10 +7,10 @@
  */
 
 return array(
-    'host' => '123.206.42.101',
+    'host' => 'localhost',
     'port' => '3306',
     'username' => 'root',
-    'passwd' => 'buaasoft1521',
+    'passwd' => 'xxxxxx',
     'dbname' => 'vlite',
     'prefix' => 'VLI_',
     'charset' => 'utf-8'
